@@ -1,0 +1,1429 @@
+{
+  "metadata": {
+    "difficulty": "medium",
+    "seed": 42,
+    "max_steps": 50,
+    "passing_score": 0.7
+  },
+  "headers": [
+    "user_id",
+    "First Name ",
+    "last_name",
+    "age",
+    "email",
+    "salary",
+    "department",
+    "status"
+  ],
+  "schema": {
+    "user_id": "int",
+    "first_name": "str",
+    "last_name": "str",
+    "age": "int",
+    "email": "str",
+    "salary": "float",
+    "department": "str",
+    "status": "bool"
+  },
+  "rows": [
+    {
+      "row_id": "r1",
+      "data": {
+        "user_id": 1,
+        "first_name": "First1",
+        "last_name": "Last1",
+        "age": 21,
+        "email": "user1@example.com",
+        "salary": "high",
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r2",
+      "data": {
+        "user_id": 2,
+        "first_name": "First2",
+        "last_name": "Last2",
+        "age": 22,
+        "email": "user2@example.com",
+        "salary": "high",
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r3",
+      "data": {
+        "user_id": 3,
+        "first_name": "First3",
+        "last_name": "Last3",
+        "age": 23,
+        "email": "user3@example.com",
+        "salary": "high",
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r4",
+      "data": {
+        "user_id": 4,
+        "first_name": "First4",
+        "last_name": "Last4",
+        "age": 24,
+        "email": "user4@example.com",
+        "salary": "high",
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r5",
+      "data": {
+        "user_id": 5,
+        "first_name": "First5",
+        "last_name": "Last5",
+        "age": 25,
+        "email": "user5@example.com",
+        "salary": "high",
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r6",
+      "data": {
+        "user_id": 6,
+        "first_name": "First6",
+        "last_name": "Last6",
+        "age": 26,
+        "email": "user6@example.com",
+        "salary": "high",
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r7",
+      "data": {
+        "user_id": 7,
+        "first_name": "First7",
+        "last_name": "Last7",
+        "age": 27,
+        "email": "user7@example.com",
+        "salary": "high",
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r8",
+      "data": {
+        "user_id": 8,
+        "first_name": "First8",
+        "last_name": "Last8",
+        "age": 28,
+        "email": "user8@example.com",
+        "salary": "high",
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r9",
+      "data": {
+        "user_id": 9,
+        "first_name": "First9",
+        "last_name": "Last9",
+        "age": 29,
+        "email": "user9@example.com",
+        "salary": "high",
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r10",
+      "data": {
+        "user_id": 10,
+        "first_name": "First10",
+        "last_name": "Last10",
+        "age": 30,
+        "email": "user10@example.com",
+        "salary": "high",
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r11",
+      "data": {
+        "user_id": 11,
+        "first_name": "First11",
+        "last_name": "Last11",
+        "age": 31,
+        "email": null,
+        "salary": 51100.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r12",
+      "data": {
+        "user_id": 12,
+        "first_name": "First12",
+        "last_name": "Last12",
+        "age": 32,
+        "email": null,
+        "salary": 51200.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r13",
+      "data": {
+        "user_id": 13,
+        "first_name": "First13",
+        "last_name": "Last13",
+        "age": 33,
+        "email": null,
+        "salary": 51300.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r14",
+      "data": {
+        "user_id": 14,
+        "first_name": "First14",
+        "last_name": "Last14",
+        "age": 34,
+        "email": null,
+        "salary": 51400.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r15",
+      "data": {
+        "user_id": 15,
+        "first_name": "First15",
+        "last_name": "Last15",
+        "age": 35,
+        "email": null,
+        "salary": 51500.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r16",
+      "data": {
+        "user_id": 16,
+        "first_name": "First16",
+        "last_name": "Last16",
+        "age": 36,
+        "email": "user16@example.com",
+        "salary": 51600.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r17",
+      "data": {
+        "user_id": 17,
+        "first_name": "First17",
+        "last_name": "Last17",
+        "age": 37,
+        "email": "user17@example.com",
+        "salary": 51700.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r18",
+      "data": {
+        "user_id": 18,
+        "first_name": "First18",
+        "last_name": "Last18",
+        "age": 38,
+        "email": "user18@example.com",
+        "salary": 51800.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r19",
+      "data": {
+        "user_id": 19,
+        "first_name": "First19",
+        "last_name": "Last19",
+        "age": 39,
+        "email": "user19@example.com",
+        "salary": 51900.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r20",
+      "data": {
+        "user_id": 20,
+        "first_name": "First20",
+        "last_name": "Last20",
+        "age": 40,
+        "email": "user20@example.com",
+        "salary": 52000.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r21",
+      "data": {
+        "user_id": 21,
+        "first_name": "First21",
+        "last_name": "Last21",
+        "age": 41,
+        "email": "user21@example.com",
+        "salary": 52100.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r22",
+      "data": {
+        "user_id": 22,
+        "first_name": "First22",
+        "last_name": "Last22",
+        "age": 42,
+        "email": "user22@example.com",
+        "salary": 52200.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r23",
+      "data": {
+        "user_id": 23,
+        "first_name": "First23",
+        "last_name": "Last23",
+        "age": 43,
+        "email": "user23@example.com",
+        "salary": 52300.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r24",
+      "data": {
+        "user_id": 24,
+        "first_name": "First24",
+        "last_name": "Last24",
+        "age": 44,
+        "email": "user24@example.com",
+        "salary": 52400.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r25",
+      "data": {
+        "user_id": 25,
+        "first_name": "First25",
+        "last_name": "Last25",
+        "age": 45,
+        "email": "user25@example.com",
+        "salary": 52500.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r26",
+      "data": {
+        "user_id": 26,
+        "first_name": "First26",
+        "last_name": "Last26",
+        "age": 46,
+        "email": "user26@example.com",
+        "salary": 52600.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r27",
+      "data": {
+        "user_id": 27,
+        "first_name": "First27",
+        "last_name": "Last27",
+        "age": 47,
+        "email": "user27@example.com",
+        "salary": 52700.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r28",
+      "data": {
+        "user_id": 28,
+        "first_name": "First28",
+        "last_name": "Last28",
+        "age": 48,
+        "email": "user28@example.com",
+        "salary": 52800.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r29",
+      "data": {
+        "user_id": 29,
+        "first_name": "First29",
+        "last_name": "Last29",
+        "age": 49,
+        "email": "user29@example.com",
+        "salary": 52900.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r30",
+      "data": {
+        "user_id": 30,
+        "first_name": "First30",
+        "last_name": "Last30",
+        "age": 50,
+        "email": "user30@example.com",
+        "salary": 53000.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r31",
+      "data": {
+        "user_id": 31,
+        "first_name": "First31",
+        "last_name": "Last31",
+        "age": 51,
+        "email": "user31@example.com",
+        "salary": 53100.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r32",
+      "data": {
+        "user_id": 32,
+        "first_name": "First32",
+        "last_name": "Last32",
+        "age": 52,
+        "email": "user32@example.com",
+        "salary": 53200.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r33",
+      "data": {
+        "user_id": 33,
+        "first_name": "First33",
+        "last_name": "Last33",
+        "age": 53,
+        "email": "user33@example.com",
+        "salary": 53300.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r34",
+      "data": {
+        "user_id": 34,
+        "first_name": "First34",
+        "last_name": "Last34",
+        "age": 54,
+        "email": "user34@example.com",
+        "salary": 53400.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r35",
+      "data": {
+        "user_id": 35,
+        "first_name": "First35",
+        "last_name": "Last35",
+        "age": 55,
+        "email": "user35@example.com",
+        "salary": 53500.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r36",
+      "data": {
+        "user_id": 36,
+        "first_name": "First36",
+        "last_name": "Last36",
+        "age": 56,
+        "email": "user36@example.com",
+        "salary": 53600.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r37",
+      "data": {
+        "user_id": 37,
+        "first_name": "First37",
+        "last_name": "Last37",
+        "age": 57,
+        "email": "user37@example.com",
+        "salary": 53700.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r38",
+      "data": {
+        "user_id": 38,
+        "first_name": "First38",
+        "last_name": "Last38",
+        "age": 58,
+        "email": "user38@example.com",
+        "salary": 53800.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r39",
+      "data": {
+        "user_id": 39,
+        "first_name": "First39",
+        "last_name": "Last39",
+        "age": 59,
+        "email": "user39@example.com",
+        "salary": 53900.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r40",
+      "data": {
+        "user_id": 40,
+        "first_name": "First40",
+        "last_name": "Last40",
+        "age": 20,
+        "email": "user40@example.com",
+        "salary": 54000.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r41",
+      "data": {
+        "user_id": 41,
+        "first_name": "First41",
+        "last_name": "Last41",
+        "age": 21,
+        "email": "user41@example.com",
+        "salary": 54100.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r42",
+      "data": {
+        "user_id": 42,
+        "first_name": "First42",
+        "last_name": "Last42",
+        "age": 22,
+        "email": "user42@example.com",
+        "salary": 54200.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r43",
+      "data": {
+        "user_id": 43,
+        "first_name": "First43",
+        "last_name": "Last43",
+        "age": 23,
+        "email": "user43@example.com",
+        "salary": 54300.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r44",
+      "data": {
+        "user_id": 44,
+        "first_name": "First44",
+        "last_name": "Last44",
+        "age": 24,
+        "email": "user44@example.com",
+        "salary": 54400.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r45",
+      "data": {
+        "user_id": 45,
+        "first_name": "First45",
+        "last_name": "Last45",
+        "age": 25,
+        "email": "user45@example.com",
+        "salary": 54500.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r46",
+      "data": {
+        "user_id": 46,
+        "first_name": "First46",
+        "last_name": "Last46",
+        "age": 26,
+        "email": "user46@example.com",
+        "salary": 54600.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r47",
+      "data": {
+        "user_id": 47,
+        "first_name": "First47",
+        "last_name": "Last47",
+        "age": 27,
+        "email": "user47@example.com",
+        "salary": 54700.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r48",
+      "data": {
+        "user_id": 48,
+        "first_name": "First48",
+        "last_name": "Last48",
+        "age": 28,
+        "email": "user48@example.com",
+        "salary": 54800.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r49",
+      "data": {
+        "user_id": 49,
+        "first_name": "First49",
+        "last_name": "Last49",
+        "age": 29,
+        "email": "user49@example.com",
+        "salary": 54900.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r50",
+      "data": {
+        "user_id": 50,
+        "first_name": "First50",
+        "last_name": "Last50",
+        "age": 30,
+        "email": "user50@example.com",
+        "salary": 55000.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r51",
+      "data": {
+        "user_id": 51,
+        "first_name": "First51",
+        "last_name": "Last51",
+        "age": 31,
+        "email": "user51@example.com",
+        "salary": 55100.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r52",
+      "data": {
+        "user_id": 52,
+        "first_name": "First52",
+        "last_name": "Last52",
+        "age": 32,
+        "email": "user52@example.com",
+        "salary": 55200.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r53",
+      "data": {
+        "user_id": 53,
+        "first_name": "First53",
+        "last_name": "Last53",
+        "age": 33,
+        "email": "user53@example.com",
+        "salary": 55300.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r54",
+      "data": {
+        "user_id": 54,
+        "first_name": "First54",
+        "last_name": "Last54",
+        "age": 34,
+        "email": "user54@example.com",
+        "salary": 55400.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r55",
+      "data": {
+        "user_id": 55,
+        "first_name": "First55",
+        "last_name": "Last55",
+        "age": 35,
+        "email": "user55@example.com",
+        "salary": 55500.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r56",
+      "data": {
+        "user_id": 56,
+        "first_name": "First56",
+        "last_name": "Last56",
+        "age": 36,
+        "email": "user56@example.com",
+        "salary": 55600.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r57",
+      "data": {
+        "user_id": 57,
+        "first_name": "First57",
+        "last_name": "Last57",
+        "age": 37,
+        "email": "user57@example.com",
+        "salary": 55700.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r58",
+      "data": {
+        "user_id": 58,
+        "first_name": "First58",
+        "last_name": "Last58",
+        "age": 38,
+        "email": "user58@example.com",
+        "salary": 55800.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r59",
+      "data": {
+        "user_id": 59,
+        "first_name": "First59",
+        "last_name": "Last59",
+        "age": 39,
+        "email": "user59@example.com",
+        "salary": 55900.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r60",
+      "data": {
+        "user_id": 60,
+        "first_name": "First60",
+        "last_name": "Last60",
+        "age": 40,
+        "email": "user60@example.com",
+        "salary": 56000.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r61",
+      "data": {
+        "user_id": 61,
+        "first_name": "First61",
+        "last_name": "Last61",
+        "age": 41,
+        "email": "user61@example.com",
+        "salary": 56100.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r62",
+      "data": {
+        "user_id": 62,
+        "first_name": "First62",
+        "last_name": "Last62",
+        "age": 42,
+        "email": "user62@example.com",
+        "salary": 56200.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r63",
+      "data": {
+        "user_id": 63,
+        "first_name": "First63",
+        "last_name": "Last63",
+        "age": 43,
+        "email": "user63@example.com",
+        "salary": 56300.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r64",
+      "data": {
+        "user_id": 64,
+        "first_name": "First64",
+        "last_name": "Last64",
+        "age": 44,
+        "email": "user64@example.com",
+        "salary": 56400.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r65",
+      "data": {
+        "user_id": 65,
+        "first_name": "First65",
+        "last_name": "Last65",
+        "age": 45,
+        "email": "user65@example.com",
+        "salary": 56500.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r66",
+      "data": {
+        "user_id": 66,
+        "first_name": "First66",
+        "last_name": "Last66",
+        "age": 46,
+        "email": "user66@example.com",
+        "salary": 56600.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r67",
+      "data": {
+        "user_id": 67,
+        "first_name": "First67",
+        "last_name": "Last67",
+        "age": 47,
+        "email": "user67@example.com",
+        "salary": 56700.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r68",
+      "data": {
+        "user_id": 68,
+        "first_name": "First68",
+        "last_name": "Last68",
+        "age": 48,
+        "email": "user68@example.com",
+        "salary": 56800.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r69",
+      "data": {
+        "user_id": 69,
+        "first_name": "First69",
+        "last_name": "Last69",
+        "age": 49,
+        "email": "user69@example.com",
+        "salary": 56900.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r70",
+      "data": {
+        "user_id": 70,
+        "first_name": "First70",
+        "last_name": "Last70",
+        "age": 50,
+        "email": "user70@example.com",
+        "salary": 57000.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r71",
+      "data": {
+        "user_id": 71,
+        "first_name": "First71",
+        "last_name": "Last71",
+        "age": 51,
+        "email": "user71@example.com",
+        "salary": 57100.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r72",
+      "data": {
+        "user_id": 72,
+        "first_name": "First72",
+        "last_name": "Last72",
+        "age": 52,
+        "email": "user72@example.com",
+        "salary": 57200.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r73",
+      "data": {
+        "user_id": 73,
+        "first_name": "First73",
+        "last_name": "Last73",
+        "age": 53,
+        "email": "user73@example.com",
+        "salary": 57300.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r74",
+      "data": {
+        "user_id": 74,
+        "first_name": "First74",
+        "last_name": "Last74",
+        "age": 54,
+        "email": "user74@example.com",
+        "salary": 57400.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r75",
+      "data": {
+        "user_id": 75,
+        "first_name": "First75",
+        "last_name": "Last75",
+        "age": 55,
+        "email": "user75@example.com",
+        "salary": 57500.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r76",
+      "data": {
+        "user_id": 76,
+        "first_name": "First76",
+        "last_name": "Last76",
+        "age": 56,
+        "email": "user76@example.com",
+        "salary": 57600.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r77",
+      "data": {
+        "user_id": 77,
+        "first_name": "First77",
+        "last_name": "Last77",
+        "age": 57,
+        "email": "user77@example.com",
+        "salary": 57700.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r78",
+      "data": {
+        "user_id": 78,
+        "first_name": "First78",
+        "last_name": "Last78",
+        "age": 58,
+        "email": "user78@example.com",
+        "salary": 57800.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r79",
+      "data": {
+        "user_id": 79,
+        "first_name": "First79",
+        "last_name": "Last79",
+        "age": 59,
+        "email": "user79@example.com",
+        "salary": 57900.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r80",
+      "data": {
+        "user_id": 80,
+        "first_name": "First80",
+        "last_name": "Last80",
+        "age": 20,
+        "email": "user80@example.com",
+        "salary": 58000.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r81",
+      "data": {
+        "user_id": 81,
+        "first_name": "First81",
+        "last_name": "Last81",
+        "age": 21,
+        "email": "user81@example.com",
+        "salary": 58100.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r82",
+      "data": {
+        "user_id": 82,
+        "first_name": "First82",
+        "last_name": "Last82",
+        "age": 22,
+        "email": "user82@example.com",
+        "salary": 58200.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r83",
+      "data": {
+        "user_id": 83,
+        "first_name": "First83",
+        "last_name": "Last83",
+        "age": 23,
+        "email": "user83@example.com",
+        "salary": 58300.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r84",
+      "data": {
+        "user_id": 84,
+        "first_name": "First84",
+        "last_name": "Last84",
+        "age": 24,
+        "email": "user84@example.com",
+        "salary": 58400.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r85",
+      "data": {
+        "user_id": 85,
+        "first_name": "First85",
+        "last_name": "Last85",
+        "age": 25,
+        "email": "user85@example.com",
+        "salary": 58500.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r86",
+      "data": {
+        "user_id": 86,
+        "first_name": "First86",
+        "last_name": "Last86",
+        "age": 26,
+        "email": "user86@example.com",
+        "salary": 58600.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r87",
+      "data": {
+        "user_id": 87,
+        "first_name": "First87",
+        "last_name": "Last87",
+        "age": 27,
+        "email": "user87@example.com",
+        "salary": 58700.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r88",
+      "data": {
+        "user_id": 88,
+        "first_name": "First88",
+        "last_name": "Last88",
+        "age": 28,
+        "email": "user88@example.com",
+        "salary": 58800.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r89",
+      "data": {
+        "user_id": 89,
+        "first_name": "First89",
+        "last_name": "Last89",
+        "age": 29,
+        "email": "user89@example.com",
+        "salary": 58900.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r90",
+      "data": {
+        "user_id": 90,
+        "first_name": "First90",
+        "last_name": "Last90",
+        "age": 30,
+        "email": "user90@example.com",
+        "salary": 59000.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r91",
+      "data": {
+        "user_id": 91,
+        "first_name": "First91",
+        "last_name": "Last91",
+        "age": 31,
+        "email": "user91@example.com",
+        "salary": 59100.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r92",
+      "data": {
+        "user_id": 92,
+        "first_name": "First92",
+        "last_name": "Last92",
+        "age": 32,
+        "email": "user92@example.com",
+        "salary": 59200.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r93",
+      "data": {
+        "user_id": 93,
+        "first_name": "First93",
+        "last_name": "Last93",
+        "age": 33,
+        "email": "user93@example.com",
+        "salary": 59300.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r94",
+      "data": {
+        "user_id": 94,
+        "first_name": "First94",
+        "last_name": "Last94",
+        "age": 34,
+        "email": "user94@example.com",
+        "salary": 59400.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r95",
+      "data": {
+        "user_id": 95,
+        "first_name": "First95",
+        "last_name": "Last95",
+        "age": 35,
+        "email": "user95@example.com",
+        "salary": 59500.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r96",
+      "data": {
+        "user_id": 96,
+        "first_name": "First96",
+        "last_name": "Last96",
+        "age": 36,
+        "email": "user96@example.com",
+        "salary": 59600.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r97",
+      "data": {
+        "user_id": 97,
+        "first_name": "First97",
+        "last_name": "Last97",
+        "age": 37,
+        "email": "user97@example.com",
+        "salary": 59700.0,
+        "department": "Sales",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r98",
+      "data": {
+        "user_id": 98,
+        "first_name": "First98",
+        "last_name": "Last98",
+        "age": 38,
+        "email": "user98@example.com",
+        "salary": 59800.0,
+        "department": "HR",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r99",
+      "data": {
+        "user_id": 99,
+        "first_name": "First99",
+        "last_name": "Last99",
+        "age": 39,
+        "email": "user99@example.com",
+        "salary": 59900.0,
+        "department": "Marketing",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r100",
+      "data": {
+        "user_id": 100,
+        "first_name": "First100",
+        "last_name": "Last100",
+        "age": 40,
+        "email": "user100@example.com",
+        "salary": 60000.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r101",
+      "data": {
+        "user_id": 16,
+        "first_name": "First16",
+        "last_name": "Last16",
+        "age": 36,
+        "email": "user16@example.com",
+        "salary": 51600.0,
+        "department": "Engineering",
+        "status": true
+      }
+    },
+    {
+      "row_id": "r102",
+      "data": {
+        "user_id": 17,
+        "first_name": "First17",
+        "last_name": "Last17",
+        "age": 37,
+        "email": "user17@example.com",
+        "salary": 51700.0,
+        "department": "Sales",
+        "status": true
+      }
+    }
+  ],
+  "ground_truth": {
+    "headers": {
+      "First Name ": "first_name"
+    },
+    "missing_values": [
+      {
+        "row_id": "r11",
+        "column": "email"
+      },
+      {
+        "row_id": "r12",
+        "column": "email"
+      },
+      {
+        "row_id": "r13",
+        "column": "email"
+      },
+      {
+        "row_id": "r14",
+        "column": "email"
+      },
+      {
+        "row_id": "r15",
+        "column": "email"
+      }
+    ],
+    "duplicates": [
+      {
+        "row_ids": [
+          "r16",
+          "r101"
+        ]
+      },
+      {
+        "row_ids": [
+          "r17",
+          "r102"
+        ]
+      }
+    ],
+    "type_errors": {
+      "r1": {
+        "salary": 50100.0
+      },
+      "r2": {
+        "salary": 50200.0
+      },
+      "r3": {
+        "salary": 50300.0
+      },
+      "r4": {
+        "salary": 50400.0
+      },
+      "r5": {
+        "salary": 50500.0
+      },
+      "r6": {
+        "salary": 50600.0
+      },
+      "r7": {
+        "salary": 50700.0
+      },
+      "r8": {
+        "salary": 50800.0
+      },
+      "r9": {
+        "salary": 50900.0
+      },
+      "r10": {
+        "salary": 51000.0
+      }
+    }
+  }
+}

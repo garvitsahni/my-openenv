@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 4.5%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 199 89% 48%; /* Neon Cyan */
+    --primary-foreground: 0 0% 9%;
+    --secondary: 322 100% 50%; /* Neon Pink */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --radius: 0.5rem;
+  }
+}
+
+.cyber-card {
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  background: rgba(10, 10, 20, 0.8);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.05);
+}
+
+.neon-border-cyan { border-bottom: 2px solid #00f2ff; box-shadow: 0 4px 15px -5px #00f2ff; }
+.neon-border-pink { border-bottom: 2px solid #ff007f; box-shadow: 0 4px 15px -5px #ff007f; }
+.glitch-text:hover { text-shadow: 2px 0 #ff007f, -2px 0 #00f2ff; }

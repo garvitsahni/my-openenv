@@ -1,0 +1,49 @@
+{
+  "metadata": { "difficulty": "hard", "seed": 42, "max_steps": 25, "passing_score": 0.6 },
+  "job_description": {
+    "id": "job_001", "title": "Engineering Manager",
+    "required_skills": ["Team Leadership", "System Design", "Python", "Agile"],
+    "preferred_skills": ["P&L Management", "Hiring", "OKR Planning"],
+    "min_years_experience": 8, "education_requirement": "Bachelor's degree in technical field",
+    "responsibilities": ["Lead a team of 8 engineers", "Drive technical roadmap", "Partner with product and design", "Hire and grow talent"]
+  },
+  "resumes": [
+    { "id": "resume_001", "candidate_name": "Hannah Park",
+      "years_experience": 10, "education": "BSc Computer Science",
+      "skills": ["Team Leadership", "System Design", "Python", "Agile", "Hiring", "OKR Planning"],
+      "previous_roles": ["Engineering Manager at Scale-up", "Senior Engineer at TechCo"],
+      "summary": "10 years engineering experience including 4 years managing teams of 6-10 engineers." },
+    { "id": "resume_002", "candidate_name": "Ivan Petrov",
+      "years_experience": 12, "education": "PhD Computer Science",
+      "skills": ["Python", "Machine Learning", "Research", "System Design"],
+      "previous_roles": ["Principal Research Scientist", "Senior Engineer"],
+      "summary": "Deep technical expertise but no people management experience." },
+    { "id": "resume_003", "candidate_name": "Julia Mendes",
+      "years_experience": 8, "education": "BSc Engineering",
+      "skills": ["Team Leadership", "Agile", "Hiring", "Python", "System Design"],
+      "previous_roles": ["Engineering Manager at Startup", "Tech Lead"],
+      "summary": "Proven engineering manager at a fast-growing startup. Team grew from 3 to 12." },
+    { "id": "resume_004", "candidate_name": "Kevin Thompson",
+      "years_experience": 9, "education": "No degree - bootcamp graduate",
+      "skills": ["Team Leadership", "Python", "Agile", "System Design", "P&L Management"],
+      "previous_roles": ["VP Engineering at Small Company", "Senior Engineer"],
+      "summary": "Has held VP title but company had only 5 engineers total." }
+  ],
+  "ground_truth": {
+    "job_001": {
+      "candidate_scores": { "resume_001": 9, "resume_002": 5, "resume_003": 9, "resume_004": 6 },
+      "shortlist": ["resume_001", "resume_003"],
+      "bias_flags": [
+        { "resume_id": "resume_002", "bias_type": "credential_inflation",
+          "description": "PhD should not compensate for zero management experience for a people manager role" },
+        { "resume_id": "resume_004", "bias_type": "title_inflation",
+          "description": "VP title at a 5-person company is not equivalent to managing a team of 8" }
+      ],
+      "ranking": ["resume_001", "resume_003"],
+      "recommendations": {
+        "resume_001": "interview", "resume_002": "reject",
+        "resume_003": "interview", "resume_004": "reject"
+      }
+    }
+  }
+}

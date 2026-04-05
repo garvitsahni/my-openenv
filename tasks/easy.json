@@ -1,0 +1,172 @@
+{
+  "metadata": {
+    "difficulty": "easy",
+    "seed": 42,
+    "max_steps": 30,
+    "passing_score": 0.7
+  },
+  "emails": [
+    {
+      "id": "email_001",
+      "subject": "URGENT: Production database is down — all services affected",
+      "sender": "ops-alerts@company.com",
+      "body": "Alert: The primary PostgreSQL cluster went offline at 08:47 UTC. All customer-facing APIs are returning 503. The on-call DBA has been paged but has not responded. Immediate engineering intervention is required to restore service.",
+      "timestamp": "2024-01-15T08:47:00Z",
+      "thread_id": "thread_001",
+      "attachments": []
+    },
+    {
+      "id": "email_002",
+      "subject": "Q4 Sales Report — Final Numbers",
+      "sender": "sarah.chen@company.com",
+      "body": "Hi team, attached is the final Q4 sales report. We exceeded target by 12%. Key highlights: Enterprise segment grew 23%, SMB held steady. Please review before the board meeting on Thursday. No immediate action needed — just wanted everyone aligned on the numbers.",
+      "timestamp": "2024-01-15T09:15:00Z",
+      "thread_id": "thread_002",
+      "attachments": ["q4_sales_report.pdf"]
+    },
+    {
+      "id": "email_003",
+      "subject": "Congratulations! You've won a $500 Amazon Gift Card!!!",
+      "sender": "prizes-winner-notify@free-rewards-4u.xyz",
+      "body": "CONGRATULATIONS!!! You have been selected as today's lucky winner! Click here immediately to claim your $500 Amazon Gift Card. This offer expires in 24 hours! Act NOW or lose your prize forever! No purchase necessary. Click: http://totally-legit-prizes.xyz/claim",
+      "timestamp": "2024-01-15T09:22:00Z",
+      "thread_id": "thread_003",
+      "attachments": []
+    },
+    {
+      "id": "email_004",
+      "subject": "Re: Customer onboarding flow — design feedback",
+      "sender": "mike.johnson@company.com",
+      "body": "Thanks for the mockups, Lisa. The new onboarding wizard looks great. Two small suggestions: 1) Move the 'Skip Tutorial' button to the top-right corner so power users can bypass quickly. 2) Consider adding a progress bar. Otherwise, approved to move to development. Nice work!",
+      "timestamp": "2024-01-15T09:45:00Z",
+      "thread_id": "thread_004",
+      "attachments": []
+    },
+    {
+      "id": "email_005",
+      "subject": "Meeting notes: Engineering standup Jan 15",
+      "sender": "standup-bot@company.com",
+      "body": "Automated standup summary for January 15:\n- Backend team: API migration 80% complete, targeting Wednesday finish\n- Frontend team: Dashboard redesign in QA, 3 minor bugs remaining\n- DevOps: Kubernetes upgrade scheduled for Saturday maintenance window\n- No blockers reported\n\nNext standup: January 16, 9:00 AM PST",
+      "timestamp": "2024-01-15T10:00:00Z",
+      "thread_id": "thread_005",
+      "attachments": []
+    },
+    {
+      "id": "email_006",
+      "subject": "URGENT: Key client threatening to churn — needs executive call",
+      "sender": "jessica.wong@company.com",
+      "body": "Flagging this as critical. Acme Corp ($2.4M ARR) has filed 3 support tickets this week about API latency. Their VP of Engineering just called me directly and said they are evaluating competitors. I need an executive sponsor to join a call with them this afternoon. This cannot wait until next week.",
+      "timestamp": "2024-01-15T10:30:00Z",
+      "thread_id": "thread_006",
+      "attachments": []
+    },
+    {
+      "id": "email_007",
+      "subject": "Updated PTO Policy — effective February 1",
+      "sender": "hr@company.com",
+      "body": "Hi everyone, please review the updated PTO policy attached. Key changes: unlimited PTO is being replaced with a structured 25-day annual allowance. Rollover rules and blackout dates are outlined in the document. Please acknowledge receipt by January 25. Questions can be directed to your HR business partner.",
+      "timestamp": "2024-01-15T11:00:00Z",
+      "thread_id": "thread_007",
+      "attachments": ["pto_policy_v2.pdf"]
+    },
+    {
+      "id": "email_008",
+      "subject": "Invitation: Company All-Hands — January 22",
+      "sender": "events@company.com",
+      "body": "You're invited to the monthly All-Hands meeting.\n\nDate: January 22, 2024\nTime: 2:00 PM - 3:30 PM PST\nLocation: Main Auditorium / Zoom link below\n\nAgenda:\n1. CEO update on company strategy\n2. Product roadmap preview\n3. Q4 wins celebration\n4. Q&A session\n\nPlease RSVP by January 19.",
+      "timestamp": "2024-01-15T11:30:00Z",
+      "thread_id": "thread_008",
+      "attachments": []
+    },
+    {
+      "id": "email_009",
+      "subject": "Re: Bug #4521 — Login page crashes on Safari 16",
+      "sender": "dev-tracker@company.com",
+      "body": "Bug #4521 has been updated.\n\nStatus: Open → In Progress\nAssignee: Carlos Mendez\nPriority: High\nAffected users: ~2,400 (Safari 16 on macOS Ventura)\n\nCarlos noted: 'Root cause identified — WebKit regression with our auth SDK. Fix is straightforward, PR incoming today. Should be in tomorrow's release.'",
+      "timestamp": "2024-01-15T12:00:00Z",
+      "thread_id": "thread_009",
+      "attachments": []
+    },
+    {
+      "id": "email_010",
+      "subject": "Unsubscribe confirmation: TechDigest Weekly",
+      "sender": "no-reply@techdigest.io",
+      "body": "You have been successfully unsubscribed from TechDigest Weekly. You will no longer receive our newsletter. If this was a mistake, you can re-subscribe at any time by visiting our website. Thank you for being a reader!",
+      "timestamp": "2024-01-15T12:30:00Z",
+      "thread_id": "thread_010",
+      "attachments": []
+    }
+  ],
+  "ground_truth": {
+    "email_001": {
+      "category": "urgent",
+      "team": "engineering",
+      "escalate": true,
+      "response_hint": "Acknowledge the outage and confirm engineering is investigating immediately.",
+      "is_phishing": false
+    },
+    "email_002": {
+      "category": "normal",
+      "team": "sales",
+      "escalate": false,
+      "response_hint": "Thank Sarah and confirm you will review before Thursday.",
+      "is_phishing": false
+    },
+    "email_003": {
+      "category": "spam",
+      "team": "support",
+      "escalate": false,
+      "response_hint": "",
+      "is_phishing": false
+    },
+    "email_004": {
+      "category": "normal",
+      "team": "engineering",
+      "escalate": false,
+      "response_hint": "Acknowledge the design feedback and confirm next steps.",
+      "is_phishing": false
+    },
+    "email_005": {
+      "category": "archive",
+      "team": "engineering",
+      "escalate": false,
+      "response_hint": "",
+      "is_phishing": false
+    },
+    "email_006": {
+      "category": "urgent",
+      "team": "exec",
+      "escalate": true,
+      "response_hint": "Escalate to an executive sponsor and schedule an afternoon call with Acme Corp.",
+      "is_phishing": false
+    },
+    "email_007": {
+      "category": "normal",
+      "team": "support",
+      "escalate": false,
+      "response_hint": "Acknowledge the policy update and plan to review by the deadline.",
+      "is_phishing": false
+    },
+    "email_008": {
+      "category": "normal",
+      "team": "exec",
+      "escalate": false,
+      "response_hint": "RSVP for the All-Hands meeting.",
+      "is_phishing": false
+    },
+    "email_009": {
+      "category": "normal",
+      "team": "engineering",
+      "escalate": false,
+      "response_hint": "Note that Carlos is handling the fix; no action needed.",
+      "is_phishing": false
+    },
+    "email_010": {
+      "category": "archive",
+      "team": "support",
+      "escalate": false,
+      "response_hint": "",
+      "is_phishing": false
+    }
+  }
+}

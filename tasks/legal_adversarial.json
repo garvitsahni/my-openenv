@@ -1,0 +1,24 @@
+{
+  "metadata": { "difficulty": "adversarial", "seed": 42, "max_steps": 20, "passing_score": 0.5 },
+  "contracts": [{
+    "id": "contract_001", "type": "employment_agreement",
+    "parties": ["FairCorp Ltd.", "Alex Johnson"], "date": "2024-02-28",
+    "signature_status": "both_signed",
+    "clauses": [
+      { "id": "clause_1", "title": "Role", "body": "Employee hired as Senior Engineer." },
+      { "id": "clause_2", "title": "Non-Compete", "body": "Employee agrees not to work for direct competitors in the same city for 6 months following voluntary resignation." },
+      { "id": "clause_3", "title": "Intellectual Property", "body": "Any invention produced by Employee during working hours using company resources related to company business shall be the exclusive property of Employer." },
+      { "id": "clause_4", "title": "Termination", "body": "Either party may terminate with 30 days written notice. Employer may terminate immediately for gross misconduct with one month severance." },
+      { "id": "clause_5", "title": "Governing Law", "body": "This agreement is governed by the laws of New York, USA." }
+    ]
+  }],
+  "ground_truth": {
+    "contract_001": {
+      "contract_type": "employment_agreement", "risk_level": "low",
+      "recommend_action": "approve",
+      "critical_flags": [],
+      "high_flags": [],
+      "missing_clauses": []
+    }
+  }
+}

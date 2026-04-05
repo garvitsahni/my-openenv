@@ -1,0 +1,35 @@
+name: workbench-multi-env
+version: 1.0.0
+description: Real-world AI agent training: email triage, legal review, HR screening
+environments:
+  - id: email-triage
+    action_space:
+      type: discrete
+      actions: [classify, assign, escalate, draft, skip, done]
+    tasks:
+      - { id: email-triage-easy, difficulty: easy, max_steps: 30 }
+      - { id: email-triage-medium, difficulty: medium, max_steps: 30 }
+      - { id: email-triage-hard, difficulty: hard, max_steps: 30 }
+      - { id: email-triage-adversarial, difficulty: adversarial, max_steps: 30 }
+    reward_range: [-0.30, 0.30]
+  - id: legal-review
+    action_space:
+      type: discrete
+      actions: [identify_type, assess_risk, flag_clause, identify_missing, recommend, done]
+    tasks:
+      - { id: legal-review-easy, difficulty: easy, max_steps: 20 }
+      - { id: legal-review-medium, difficulty: medium, max_steps: 20 }
+      - { id: legal-review-hard, difficulty: hard, max_steps: 20 }
+      - { id: legal-review-adversarial, difficulty: adversarial, max_steps: 20 }
+    reward_range: [-0.20, 0.20]
+  - id: hr-screening
+    action_space:
+      type: discrete
+      actions: [score_candidate, shortlist, flag_bias, rank_shortlist, recommend, done]
+    tasks:
+      - { id: hr-screening-easy, difficulty: easy, max_steps: 25 }
+      - { id: hr-screening-medium, difficulty: medium, max_steps: 25 }
+      - { id: hr-screening-hard, difficulty: hard, max_steps: 25 }
+      - { id: hr-screening-adversarial, difficulty: adversarial, max_steps: 25 }
+    reward_range: [-0.30, 0.25]
+tags: [email, triage, legal, contract-review, hr, resume-screening, adversarial, real-world]

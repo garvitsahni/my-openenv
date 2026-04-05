@@ -1,0 +1,36 @@
+{
+  "metadata": { "difficulty": "easy", "seed": 42, "max_steps": 25, "passing_score": 0.7 },
+  "job_description": {
+    "id": "job_001", "title": "Junior Python Developer",
+    "required_skills": ["Python", "SQL", "Git"],
+    "preferred_skills": ["FastAPI", "Docker"],
+    "min_years_experience": 1, "education_requirement": "Bachelor's degree or equivalent",
+    "responsibilities": ["Write clean Python code", "Maintain databases", "Participate in code reviews"]
+  },
+  "resumes": [
+    { "id": "resume_001", "candidate_name": "Alice Chen",
+      "years_experience": 2, "education": "BSc Computer Science",
+      "skills": ["Python", "SQL", "Git", "FastAPI", "Docker"],
+      "previous_roles": ["Junior Developer at TechStartup"],
+      "summary": "Motivated developer with 2 years experience building web APIs." },
+    { "id": "resume_002", "candidate_name": "Bob Martinez",
+      "years_experience": 0, "education": "High School Diploma",
+      "skills": ["HTML", "CSS"],
+      "previous_roles": [],
+      "summary": "Recent graduate looking for first tech role." },
+    { "id": "resume_003", "candidate_name": "Carol Singh",
+      "years_experience": 3, "education": "BSc Software Engineering",
+      "skills": ["Python", "SQL", "Git", "React"],
+      "previous_roles": ["Software Developer at FinTech Co"],
+      "summary": "3 years building full stack applications." }
+  ],
+  "ground_truth": {
+    "job_001": {
+      "candidate_scores": { "resume_001": 9, "resume_002": 2, "resume_003": 8 },
+      "shortlist": ["resume_001", "resume_003"],
+      "bias_flags": [],
+      "ranking": ["resume_001", "resume_003"],
+      "recommendations": { "resume_001": "interview", "resume_002": "reject", "resume_003": "interview" }
+    }
+  }
+}

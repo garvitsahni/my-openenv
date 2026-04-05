@@ -1,0 +1,86 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.2, pytest-9.0.2, pluggy-1.6.0
+rootdir: C:\Users\Garvi\Desktop\AI Agent Training Enviroment\workbench
+plugins: anyio-4.9.0
+collected 37 items
+
+tests\test_csv_grader.py ..                                              [  5%]
+tests\test_email_env.py ...                                              [ 13%]
+tests\test_email_grader.py ..F..                                         [ 27%]
+tests\test_env.py .......FFF..                                           [ 59%]
+tests\test_grader.py .......                                             [ 78%]
+tests\test_legal_env.py ....                                             [ 89%]
+tests\test_legal_grader.py ....                                          [100%]
+
+================================== FAILURES ===================================
+____________________________ test_phishing_caught _____________________________
+
+    def test_phishing_caught():
+        grader = EmailTriageGrader()
+        res = grader.score_action("classify", {"category": "spam"}, "e1", get_phish_gt())
+>       assert res.score == 0.25
+E       AssertionError: assert 0.4 == 0.25
+E        +  where 0.4 = EmailGraderResult(score=0.4, breakdown={'action': 'classify', 'reward': 0.4}, criteria_met=['Correct classification', 'Caught phishing'], max_possible=0.45).score
+
+tests\test_email_grader.py:49: AssertionError
+_____________________________ test_tasks_endpoint _____________________________
+
+client = <starlette.testclient.TestClient object at 0x00000182C7839D10>
+
+    def test_tasks_endpoint(client: TestClient) -> None:
+        """GET /tasks returns all 6 tasks."""
+        resp = client.get("/tasks")
+        assert resp.status_code == 200
+        tasks = resp.json()
+>       assert len(tasks) == 6
+E       AssertionError: assert 3 == 6
+E        +  where 3 = len(['email-triage-easy', 'email-triage-medium', 'email-triage-hard'])
+
+tests\test_env.py:156: AssertionError
+_______________________ test_tasks_filter_by_difficulty _______________________
+
+client = <starlette.testclient.TestClient object at 0x00000182C783AAD0>
+
+    def test_tasks_filter_by_difficulty(client: TestClient) -> None:
+        """GET /tasks?difficulty=easy returns only easy tasks."""
+        resp = client.get("/tasks", params={"difficulty": "easy"})
+        assert resp.status_code == 200
+        tasks = resp.json()
+>       assert len(tasks) == 2
+E       AssertionError: assert 3 == 2
+E        +  where 3 = len(['email-triage-easy', 'email-triage-medium', 'email-triage-hard'])
+
+tests\test_env.py:166: AssertionError
+________________________ test_invalid_action_handling _________________________
+
+client = <starlette.testclient.TestClient object at 0x00000182C78B0510>
+
+    def test_invalid_action_handling(client: TestClient) -> None:
+        """Send action with invalid action_type \u2192 proper error response."""
+        # First reset
+        reset_resp = client.post("/reset", json={"task_id": "email-triage-easy", "seed": 42})
+        assert reset_resp.status_code == 200
+        episode_id = reset_resp.json()["episode_id"]
+    
+        # Send invalid action ù missing required args for classify
+        step_resp = client.post("/step", json={
+            "episode_id": episode_id,
+            "action": {
+                "action_type": "classify",
+                "args": {},   # Missing email_id and category
+            },
+        })
+>       assert step_resp.status_code == 422, (
+            f"Expected 422 for invalid action, got {step_resp.status_code}: {step_resp.json()}"
+        )
+E       AssertionError: Expected 422 for invalid action, got 200: {'observation': {'emails': [{'id': 'email_001', 'subject': 'CRITICAL - Production database is down', 'sender': 'server-alerts@company.com', 'body': 'The main production database has been unresponsive for 10 minutes. All customer orders are failing. Immediate action required.', 'timestamp': '2024-01-15T09:00:00Z', 'thread_id': 'thread_001', 'attachments': []}, {'id': 'email_002', 'subject': 'See who viewed your profile this week', 'sender': 'newsletter@linkedin.com', 'body': 'You had 14 profile views this week. Upgrade to Premium to see who.', 'timestamp': '2024-01-15T08:30:00Z', 'thread_id': 'thread_002', 'attachments': []}, {'id': 'email_003', 'subject': 'Team lunch Friday?', 'sender': 'sarah.jones@company.com', 'body': 'Hey! Thinking of organizing a team lunch this Friday at 1pm. Let me know if you can make it. No pressure!', 'timestamp': '2024-01-15T08:00:00Z', 'thread_id': 'thread_003', 'attachments': []}, {'id': 'email_004', 'subject': 'Q4 sales report attached', 'sender': 'reports@company.com', 'body': 'Please find the Q4 sales report attached for your review. No immediate action needed.', 'timestamp': '2024-01-15T07:45:00Z', 'thread_id': 'thread_004', 'attachments': ['q4_report.pdf']}, {'id': 'email_005', 'subject': 'Customer complaint - Order #4821', 'sender': 'support@helpdesk.com', 'body': 'A customer is reporting that order #4821 has not arrived after 2 weeks. They are requesting an urgent update.', 'timestamp': '2024-01-15T07:30:00Z', 'thread_id': 'thread_005', 'attachments': []}], 'step_count': 1, 'remaining_steps': 29, 'available_actions': ['classify', 'assign', 'escalate', 'draft', 'skip', 'done'], 'context': {}}, 'reward': 0.0, 'done': False, 'info': {'action': 'classify'}}
+E       assert 200 == 422
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests\test_env.py:186: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_email_grader.py::test_phishing_caught - AssertionError: ass...
+FAILED tests/test_env.py::test_tasks_endpoint - AssertionError: assert 3 == 6
+FAILED tests/test_env.py::test_tasks_filter_by_difficulty - AssertionError: a...
+FAILED tests/test_env.py::test_invalid_action_handling - AssertionError: Expe...
+======================== 4 failed, 33 passed in 0.59s =========================

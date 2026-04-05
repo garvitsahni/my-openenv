@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "difficulty": "medium",
+    "seed": 42,
+    "max_steps": 30,
+    "passing_score": 0.65
+  },
+  "emails": [
+    {
+      "id": "email_001",
+      "subject": "Following up on our proposal",
+      "sender": "james.miller@bigclient.com",
+      "body": "Hi, just checking in on the proposal we discussed last week. We have a board meeting Thursday and would love to have something to present. Our contract is worth around $200k annually.",
+      "timestamp": "2024-01-15T09:00:00Z",
+      "thread_id": "thread_001",
+      "attachments": []
+    },
+    {
+      "id": "email_002",
+      "subject": "Scheduled maintenance tonight 11pm-1am",
+      "sender": "it-support@company.com",
+      "body": "Reminder: planned maintenance window tonight. Some services will be intermittently unavailable. No action needed from your side.",
+      "timestamp": "2024-01-15T08:30:00Z",
+      "thread_id": "thread_002",
+      "attachments": []
+    },
+    {
+      "id": "email_003",
+      "subject": "RE: RE: RE: Budget approval - URGENT",
+      "sender": "priya.sharma@company.com",
+      "body": "Hi, I sent this three times already. The finance team needs the Q2 budget signed off by EOD or we lose the vendor discount. This has been stuck in approvals for a week.",
+      "timestamp": "2024-01-15T08:00:00Z",
+      "thread_id": "thread_003",
+      "attachments": []
+    },
+    {
+      "id": "email_004",
+      "subject": "New employee onboarding - start date Feb 1",
+      "sender": "hr@company.com",
+      "body": "Just a heads up that two new engineers are joining February 1st. Please ensure their laptops and access are ready by January 30th.",
+      "timestamp": "2024-01-15T07:45:00Z",
+      "thread_id": "thread_004",
+      "attachments": []
+    },
+    {
+      "id": "email_005",
+      "subject": "Your Amazon order has shipped",
+      "sender": "shipment-tracking@amazon.com",
+      "body": "Your order #112-4521890 has been shipped and will arrive by Thursday.",
+      "timestamp": "2024-01-15T07:00:00Z",
+      "thread_id": "thread_005",
+      "attachments": []
+    }
+  ],
+  "ground_truth": {
+    "email_001": { "category": "urgent", "team": "sales", "escalate": true, "is_phishing": false, "response_hint": "Prioritizing proposal and sending to board by Wednesday." },
+    "email_002": { "category": "normal", "team": "engineering", "escalate": false, "is_phishing": false, "response_hint": null },
+    "email_003": { "category": "urgent", "team": "exec", "escalate": true, "is_phishing": false, "response_hint": "Approving Q2 budget immediately to secure vendor discount." },
+    "email_004": { "category": "normal", "team": "engineering", "escalate": false, "is_phishing": false, "response_hint": null },
+    "email_005": { "category": "archive", "team": null, "escalate": false, "is_phishing": false, "response_hint": null }
+  }
+}

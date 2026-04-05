@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "difficulty": "hard",
+    "seed": 42,
+    "max_steps": 30,
+    "passing_score": 0.6
+  },
+  "emails": [
+    {
+      "id": "email_001",
+      "subject": "URGENT: Your account will be suspended in 24 hours",
+      "sender": "it-security@company-helpdesk.net",
+      "body": "Dear employee, our systems have detected unusual login activity on your account. You must verify your credentials immediately by clicking the link below or your access will be revoked. Click here: http://company-helpdesk.net/verify?token=xR92k",
+      "timestamp": "2024-01-15T09:00:00Z",
+      "thread_id": "thread_001",
+      "attachments": []
+    },
+    {
+      "id": "email_002",
+      "subject": "Client issue - need engineering help",
+      "sender": "alex.chen@company.com",
+      "body": "Hey, one of our clients is getting a 500 error on checkout. Happened twice today. Not sure if it is urgent or a one-off. Could someone take a look when they get a chance?",
+      "timestamp": "2024-01-15T08:30:00Z",
+      "thread_id": "thread_bug_001",
+      "attachments": []
+    },
+    {
+      "id": "email_003",
+      "subject": "Checkout error on your platform",
+      "sender": "michael.brown@bigclient.com",
+      "body": "Hi, our customers have been getting an error on your checkout page since this morning. This is impacting our sales significantly. We need this fixed today or we will have to escalate to your management.",
+      "timestamp": "2024-01-15T08:45:00Z",
+      "thread_id": "thread_bug_001",
+      "attachments": []
+    },
+    {
+      "id": "email_004",
+      "subject": "Free iPhone 15 Pro - You have been selected!",
+      "sender": "prizes@win-rewards99.com",
+      "body": "Congratulations! You have been randomly selected to receive a free iPhone 15 Pro. Click here to claim your prize within 24 hours.",
+      "timestamp": "2024-01-15T07:00:00Z",
+      "thread_id": "thread_004",
+      "attachments": []
+    },
+    {
+      "id": "email_005",
+      "subject": "RE: Salary review discussion",
+      "sender": "ceo@company.com",
+      "body": "Following up on our chat last week. I want to make sure we handle your salary review before the board meeting. Can we meet Thursday? Keep this between us for now.",
+      "timestamp": "2024-01-15T08:00:00Z",
+      "thread_id": "thread_005",
+      "attachments": []
+    }
+  ],
+  "ground_truth": {
+    "email_001": { "category": "spam", "team": null, "escalate": false, "is_phishing": true, "response_hint": null },
+    "email_002": { "category": "normal", "team": "engineering", "escalate": false, "is_phishing": false, "response_hint": null },
+    "email_003": { "category": "urgent", "team": "engineering", "escalate": true, "is_phishing": false, "response_hint": "Investigating checkout error immediately, will update within 1 hour." },
+    "email_004": { "category": "spam", "team": null, "escalate": false, "is_phishing": false, "response_hint": null },
+    "email_005": { "category": "urgent", "team": "exec", "escalate": true, "is_phishing": false, "response_hint": "Confirming Thursday meeting for salary review discussion." }
+  }
+}

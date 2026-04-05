@@ -1,0 +1,172 @@
+{
+  "metadata": {
+    "difficulty": "medium",
+    "seed": 42,
+    "max_steps": 30,
+    "passing_score": 0.5
+  },
+  "emails": [
+    {
+      "id": "email_001",
+      "subject": "Re: Deployment rollback — was it successful?",
+      "sender": "carlos.mendez@company.com",
+      "body": "Team, we rolled back the v2.8 deployment last night after reports of intermittent 500 errors. The rollback completed at 11:42 PM. I've confirmed services are stable this morning but I'm seeing elevated error rates on the /payments endpoint. Not sure if this is residual or a new issue. Can someone from backend check the logs? It may be nothing, but flagging just in case.",
+      "timestamp": "2024-01-15T08:10:00Z",
+      "thread_id": "thread_001",
+      "attachments": []
+    },
+    {
+      "id": "email_002",
+      "subject": "URGENT: Contract renewal deadline tomorrow — Meridian Corp",
+      "sender": "rachel.kim@company.com",
+      "body": "The Meridian Corp renewal ($890K ARR) expires tomorrow at 5 PM EST. Legal has approved the updated terms but we still need VP-level sign-off on the 8% discount they're requesting. I've tried reaching David three times — he's in back-to-back meetings. Can someone escalate this? If we miss this deadline, they have a 30-day opt-out clause.",
+      "timestamp": "2024-01-15T09:00:00Z",
+      "thread_id": "thread_002",
+      "attachments": ["meridian_renewal_terms.pdf"]
+    },
+    {
+      "id": "email_003",
+      "subject": "Weekly product newsletter — January 15",
+      "sender": "product-updates@company.com",
+      "body": "This week in product:\n\n🚀 Shipped: Dark mode for the dashboard (beta)\n📊 Metrics: DAU up 7% week-over-week\n🐛 Fixed: 14 bugs closed, 3 open P1s remaining\n📅 Upcoming: Mobile app v3.0 beta starts Jan 22\n\nFull changelog: https://internal.company.com/changelog\n\nHave feedback? Reply to this email or ping #product-feedback on Slack.",
+      "timestamp": "2024-01-15T09:30:00Z",
+      "thread_id": "thread_003",
+      "attachments": []
+    },
+    {
+      "id": "email_004",
+      "subject": "Fwd: Customer complaint — data export broken",
+      "sender": "support-escalation@company.com",
+      "body": "Forwarding from Tier 1 support. Customer: BlueStar LLC (Enterprise plan). They report that CSV exports from the analytics dashboard have been returning empty files since January 12. They've tried multiple browsers and accounts. This is blocking their monthly board report which is due this Friday. They've asked to speak with an engineer directly. Ticket #8834.",
+      "timestamp": "2024-01-15T10:00:00Z",
+      "thread_id": "thread_004",
+      "attachments": []
+    },
+    {
+      "id": "email_005",
+      "subject": "Team lunch — Thursday Jan 18",
+      "sender": "lisa.park@company.com",
+      "body": "Hey everyone! Organizing a team lunch for Thursday. We're thinking either that new Italian place on 5th or the usual sushi spot. Please vote in the Slack poll I posted in #team-social. Budget is $30/person, company card. RSVPs needed by Wednesday EOD so I can make a reservation.",
+      "timestamp": "2024-01-15T10:15:00Z",
+      "thread_id": "thread_005",
+      "attachments": []
+    },
+    {
+      "id": "email_006",
+      "subject": "Re: API rate limiting — customer impact assessment",
+      "sender": "devops@company.com",
+      "body": "Following up on last week's discussion about tightening API rate limits. I ran the impact analysis: 4 customers would be affected, but only 1 (NovaTech) would see significant throttling — they're making 3x our recommended call volume. Proposal: implement the new limits but give NovaTech a 60-day grace period and a dedicated account manager to help them optimize. Thoughts?",
+      "timestamp": "2024-01-15T10:45:00Z",
+      "thread_id": "thread_006",
+      "attachments": ["rate_limit_impact.xlsx"]
+    },
+    {
+      "id": "email_007",
+      "subject": "IMPORTANT: All-hands rescheduled to January 29",
+      "sender": "ceo@company.com",
+      "body": "Due to a scheduling conflict with our board meeting, the January All-Hands has been moved from January 22 to January 29, same time (2 PM PST). I know this is inconvenient and I apologize for the late notice. Please update your calendars. The agenda will remain the same, with an additional update on our Series C progress. See you there.",
+      "timestamp": "2024-01-15T11:00:00Z",
+      "thread_id": "thread_007",
+      "attachments": []
+    },
+    {
+      "id": "email_008",
+      "subject": "Freelancer invoice #2024-017 — pending approval",
+      "sender": "accounts-payable@company.com",
+      "body": "Invoice #2024-017 from contractor James Wright ($4,200 for January frontend development) is pending your approval. Payment terms: Net-15. This invoice has been matched against PO #3892. Please approve or reject in the finance portal by January 20. If no action is taken, it will auto-approve per company policy.",
+      "timestamp": "2024-01-15T11:30:00Z",
+      "thread_id": "thread_008",
+      "attachments": ["invoice_2024_017.pdf"]
+    },
+    {
+      "id": "email_009",
+      "subject": "Security advisory: Update OpenSSL to 3.2.1",
+      "sender": "security@company.com",
+      "body": "A medium-severity CVE (CVE-2024-0727) has been published for OpenSSL versions prior to 3.2.1. Our infrastructure scan shows 12 services running affected versions. While this vulnerability requires local access to exploit (reducing real-world risk), our security policy requires patching within 14 days. DevOps has prepared an automated update — please coordinate with your team to schedule a maintenance window.",
+      "timestamp": "2024-01-15T12:00:00Z",
+      "thread_id": "thread_009",
+      "attachments": []
+    },
+    {
+      "id": "email_010",
+      "subject": "Re: Partnership proposal — DataSync AI",
+      "sender": "bizdev@company.com",
+      "body": "Good news — DataSync AI has agreed to our revised partnership terms. They'll integrate our API into their platform and we'll co-market to their 15K customer base. Legal is drafting the final agreement. One open question: they want a case study published within 90 days of launch. Marketing says they can handle it but need engineering to provide performance benchmarks. Can we commit to that timeline?",
+      "timestamp": "2024-01-15T12:30:00Z",
+      "thread_id": "thread_010",
+      "attachments": []
+    }
+  ],
+  "ground_truth": {
+    "email_001": {
+      "category": "urgent",
+      "team": "engineering",
+      "escalate": false,
+      "response_hint": "Ask backend team to investigate the elevated error rates on /payments endpoint.",
+      "is_phishing": false
+    },
+    "email_002": {
+      "category": "urgent",
+      "team": "exec",
+      "escalate": true,
+      "response_hint": "Escalate immediately to get VP sign-off on the discount before the deadline.",
+      "is_phishing": false
+    },
+    "email_003": {
+      "category": "archive",
+      "team": "engineering",
+      "escalate": false,
+      "response_hint": "",
+      "is_phishing": false
+    },
+    "email_004": {
+      "category": "urgent",
+      "team": "support",
+      "escalate": true,
+      "response_hint": "Assign an engineer to investigate the empty CSV export issue for BlueStar LLC.",
+      "is_phishing": false
+    },
+    "email_005": {
+      "category": "normal",
+      "team": "support",
+      "escalate": false,
+      "response_hint": "Vote in the Slack poll and RSVP by Wednesday.",
+      "is_phishing": false
+    },
+    "email_006": {
+      "category": "normal",
+      "team": "engineering",
+      "escalate": false,
+      "response_hint": "Review the rate limit proposal and provide feedback on the NovaTech grace period.",
+      "is_phishing": false
+    },
+    "email_007": {
+      "category": "normal",
+      "team": "exec",
+      "escalate": false,
+      "response_hint": "Update calendar for the rescheduled All-Hands on January 29.",
+      "is_phishing": false
+    },
+    "email_008": {
+      "category": "normal",
+      "team": "exec",
+      "escalate": false,
+      "response_hint": "Approve or review the invoice in the finance portal before January 20.",
+      "is_phishing": false
+    },
+    "email_009": {
+      "category": "normal",
+      "team": "engineering",
+      "escalate": false,
+      "response_hint": "Coordinate with DevOps to schedule the OpenSSL upgrade within 14 days.",
+      "is_phishing": false
+    },
+    "email_010": {
+      "category": "normal",
+      "team": "sales",
+      "escalate": false,
+      "response_hint": "Confirm whether engineering can provide performance benchmarks within 90 days.",
+      "is_phishing": false
+    }
+  }
+}

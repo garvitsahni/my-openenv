@@ -1,0 +1,90 @@
+{
+  "metadata": {
+    "difficulty": "hard",
+    "seed": 42,
+    "max_steps": 20,
+    "passing_score": 0.6
+  },
+  "contracts": [
+    {
+      "id": "contract_001",
+      "type": "employment_agreement",
+      "parties": ["MegaCorp LLC", "Priya Sharma"],
+      "date": "2024-02-28",
+      "clauses": [
+        {
+          "id": "clause_1",
+          "title": "Role",
+          "body": "Employee hired as Senior Engineer. Duties include any tasks reasonably assigned by management."
+        },
+        {
+          "id": "clause_2",
+          "title": "Compensation",
+          "body": "Base salary $120,000/year payable bi-weekly. Bonus at sole discretion of employer."
+        },
+        {
+          "id": "clause_3",
+          "title": "Intellectual Property",
+          "body": "Any invention, software, or creative work produced by Employee, whether during or outside working hours, whether or not related to company business, shall be the exclusive property of Employer."
+        },
+        {
+          "id": "clause_4",
+          "title": "Non-Compete",
+          "body": "Employee agrees not to work for any company in the technology sector for 3 years following termination, globally."
+        },
+        {
+          "id": "clause_5",
+          "title": "Termination",
+          "body": "Employer may terminate employment at any time for any reason. Employee must provide 90 days notice to resign."
+        },
+        {
+          "id": "clause_6",
+          "title": "Arbitration",
+          "body": "All disputes must be resolved through binding arbitration. Employee waives right to jury trial and class action participation."
+        },
+        {
+          "id": "clause_7",
+          "title": "Governing Law",
+          "body": "This agreement is governed by the laws of Delaware, USA."
+        }
+      ],
+      "signature_status": "both_signed"
+    }
+  ],
+  "ground_truth": {
+    "contract_001": {
+      "contract_type": "employment_agreement",
+      "risk_level": "high",
+      "recommend_action": "reject",
+      "critical_flags": [
+        {
+          "clause_id": "clause_3",
+          "issue": "ip_overreach",
+          "severity": "critical",
+          "description": "IP clause covers personal projects outside working hours unrelated to company business"
+        },
+        {
+          "clause_id": "clause_6",
+          "issue": "rights_waiver",
+          "severity": "critical",
+          "description": "Employee waives jury trial and class action rights - significant rights removal"
+        }
+      ],
+      "high_flags": [
+        {
+          "clause_id": "clause_4",
+          "issue": "non_compete_overreach",
+          "severity": "high",
+          "description": "3 year global non-compete across entire tech sector is overly broad"
+        },
+        {
+          "clause_id": "clause_5",
+          "issue": "asymmetric_termination",
+          "severity": "high",
+          "description": "Employer has at-will termination but employee requires 90 days notice to resign"
+        }
+      ],
+      "missing_clauses": ["severance_terms", "dispute_resolution_alternative"]
+    }
+  }
+}

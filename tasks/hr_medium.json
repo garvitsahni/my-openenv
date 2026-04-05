@@ -1,0 +1,47 @@
+{
+  "metadata": { "difficulty": "medium", "seed": 42, "max_steps": 25, "passing_score": 0.65 },
+  "job_description": {
+    "id": "job_001", "title": "Senior Data Engineer",
+    "required_skills": ["Python", "SQL", "Spark", "Airflow"],
+    "preferred_skills": ["Kafka", "dbt", "Kubernetes"],
+    "min_years_experience": 5, "education_requirement": "Bachelor's degree in technical field",
+    "responsibilities": ["Build data pipelines", "Optimize query performance", "Mentor junior engineers"]
+  },
+  "resumes": [
+    { "id": "resume_001", "candidate_name": "David Kim",
+      "years_experience": 7, "education": "BSc Computer Science",
+      "skills": ["Python", "SQL", "Spark", "Airflow", "Kafka", "dbt"],
+      "previous_roles": ["Senior Data Engineer at BigTech", "Data Engineer at Startup"],
+      "summary": "7 years experience building large-scale data infrastructure." },
+    { "id": "resume_002", "candidate_name": "Emma Watson",
+      "years_experience": 6, "education": "BSc Mathematics",
+      "skills": ["Python", "SQL", "Spark", "R", "Tableau"],
+      "previous_roles": ["Data Scientist at Analytics Firm", "Analyst at Bank"],
+      "summary": "Strong analytical background, transitioning from data science to engineering." },
+    { "id": "resume_003", "candidate_name": "Frank Okafor",
+      "years_experience": 5, "education": "Self-taught, multiple certifications",
+      "skills": ["Python", "SQL", "Airflow", "Kubernetes", "dbt"],
+      "previous_roles": ["Data Engineer at E-commerce Co", "Junior Engineer"],
+      "summary": "Self-taught engineer with proven track record." },
+    { "id": "resume_004", "candidate_name": "Grace Liu",
+      "years_experience": 3, "education": "MSc Data Science",
+      "skills": ["Python", "SQL", "Spark", "Airflow"],
+      "previous_roles": ["Data Engineer at Startup"],
+      "summary": "Strong academic background, below minimum experience." }
+  ],
+  "ground_truth": {
+    "job_001": {
+      "candidate_scores": { "resume_001": 10, "resume_002": 6, "resume_003": 8, "resume_004": 5 },
+      "shortlist": ["resume_001", "resume_003"],
+      "bias_flags": [
+        { "resume_id": "resume_003", "bias_type": "education_bias",
+          "description": "Self-taught background should not penalize candidate with 5 years proven experience" }
+      ],
+      "ranking": ["resume_001", "resume_003"],
+      "recommendations": {
+        "resume_001": "interview", "resume_002": "reject",
+        "resume_003": "interview", "resume_004": "reject"
+      }
+    }
+  }
+}

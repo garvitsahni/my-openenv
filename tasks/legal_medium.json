@@ -1,0 +1,74 @@
+{
+  "metadata": {
+    "difficulty": "medium",
+    "seed": 42,
+    "max_steps": 20,
+    "passing_score": 0.65
+  },
+  "contracts": [
+    {
+      "id": "contract_001",
+      "type": "vendor_agreement",
+      "parties": ["StartupXYZ", "CloudBase Ltd."],
+      "date": "2024-03-01",
+      "clauses": [
+        {
+          "id": "clause_1",
+          "title": "Services",
+          "body": "Vendor will provide cloud hosting services with 99.9% uptime guarantee."
+        },
+        {
+          "id": "clause_2",
+          "title": "Payment",
+          "body": "Client agrees to pay $5,000/month. Payment due within 60 days of invoice."
+        },
+        {
+          "id": "clause_3",
+          "title": "Data Ownership",
+          "body": "All data uploaded by Client to Vendor platform remains property of the Vendor unless otherwise agreed in writing."
+        },
+        {
+          "id": "clause_4",
+          "title": "Liability",
+          "body": "Vendor total liability shall not exceed one month service fee of $5,000 regardless of the nature of the claim."
+        },
+        {
+          "id": "clause_5",
+          "title": "Auto-Renewal",
+          "body": "Contract automatically renews annually unless cancelled 90 days before expiry."
+        }
+      ],
+      "signature_status": "client_only"
+    }
+  ],
+  "ground_truth": {
+    "contract_001": {
+      "contract_type": "vendor_agreement",
+      "risk_level": "high",
+      "recommend_action": "reject",
+      "critical_flags": [
+        {
+          "clause_id": "clause_3",
+          "issue": "data_ownership_transfer",
+          "severity": "critical",
+          "description": "Client data becomes vendor property - unacceptable for any business"
+        }
+      ],
+      "high_flags": [
+        {
+          "clause_id": "clause_4",
+          "issue": "liability_cap_too_low",
+          "severity": "high",
+          "description": "Liability capped at $5,000 which is far too low for a hosting contract"
+        },
+        {
+          "clause_id": "signature_block",
+          "issue": "missing_vendor_signature",
+          "severity": "high",
+          "description": "Contract may not be enforceable without vendor signature"
+        }
+      ],
+      "missing_clauses": ["data_breach_notification", "sla_remedies"]
+    }
+  }
+}

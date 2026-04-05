@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "difficulty": "easy",
+    "seed": 42,
+    "max_steps": 20,
+    "passing_score": 0.7
+  },
+  "contracts": [
+    {
+      "id": "contract_001",
+      "type": "non_disclosure_agreement",
+      "parties": ["TechCorp Inc.", "John Smith"],
+      "date": "2024-01-15",
+      "clauses": [
+        {
+          "id": "clause_1",
+          "title": "Confidentiality",
+          "body": "Receiving Party agrees not to disclose any proprietary information shared by Disclosing Party to any third party for a period of 2 years."
+        },
+        {
+          "id": "clause_2",
+          "title": "Exclusions",
+          "body": "This agreement does not apply to information that is already publicly available or independently developed by Receiving Party."
+        },
+        {
+          "id": "clause_3",
+          "title": "Termination",
+          "body": "Either party may terminate this agreement with 30 days written notice."
+        },
+        {
+          "id": "clause_4",
+          "title": "Governing Law",
+          "body": "This agreement is governed by the laws of California, USA."
+        }
+      ],
+      "signature_status": "both_signed"
+    }
+  ],
+  "ground_truth": {
+    "contract_001": {
+      "contract_type": "non_disclosure_agreement",
+      "risk_level": "low",
+      "recommend_action": "approve",
+      "critical_flags": [],
+      "high_flags": [],
+      "missing_clauses": []
+    }
+  }
+}

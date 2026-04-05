@@ -1,0 +1,172 @@
+{
+  "metadata": {
+    "difficulty": "hard",
+    "seed": 42,
+    "max_steps": 30,
+    "passing_score": 0.4
+  },
+  "emails": [
+    {
+      "id": "email_001",
+      "subject": "CRITICAL: Unauthorized access detected — immediate action required",
+      "sender": "it-security@c0mpany-secure.net",
+      "body": "SECURITY ALERT: Our monitoring systems have detected unauthorized access attempts on your corporate account. Your credentials may have been compromised in a recent data breach.\n\nTo secure your account immediately, please verify your identity by clicking the link below and entering your corporate credentials:\n\nhttps://company-secure-verify.net/auth/reset?token=a8f3k2\n\nIMPORTANT: Failure to verify within 4 hours will result in temporary account suspension. This is an automated security measure to protect company assets.\n\nIT Security Team",
+      "timestamp": "2024-01-15T08:15:00Z",
+      "thread_id": "thread_001",
+      "attachments": ["security_advisory.html"]
+    },
+    {
+      "id": "email_002",
+      "subject": "Re: Server migration timeline — conflicting deadlines",
+      "sender": "infrastructure@company.com",
+      "body": "Team, we have a conflict. The database migration to the new cluster is scheduled for this Saturday, but I just learned that marketing is running a major campaign launch on Sunday that's expected to drive 5x normal traffic. If the migration has any issues, we won't have time to rollback before the traffic spike. Options: 1) Move migration to next Saturday (delays the project by a week), 2) Proceed but have full team on standby Sunday. Both options have significant downsides. I need a decision from leadership by EOD Thursday.",
+      "timestamp": "2024-01-15T08:45:00Z",
+      "thread_id": "thread_002",
+      "attachments": []
+    },
+    {
+      "id": "email_003",
+      "subject": "URGENT: Payment processing failures — customer impact growing",
+      "sender": "payments-alerts@company.com",
+      "body": "ALERT: Payment processing failure rate has increased to 12% over the last hour (normal: <0.5%). We've received 47 customer complaints via support chat and 12 social media mentions. The issue appears to be related to our Stripe integration — a webhook endpoint is returning timeouts. Revenue impact estimate: $23K/hour in failed transactions. The payments team is investigating but this may require escalation to Stripe's enterprise support line. Incident channel: #incident-payments-0115.",
+      "timestamp": "2024-01-15T09:00:00Z",
+      "thread_id": "thread_003",
+      "attachments": []
+    },
+    {
+      "id": "email_004",
+      "subject": "Re: Q1 hiring plan — budget concerns",
+      "sender": "vp-engineering@company.com",
+      "body": "I've reviewed the Q1 hiring plan and I have concerns. Finance has signaled that our burn rate needs to decrease by 15% this quarter. Simultaneously, the board wants us to accelerate the AI product line. We can't do both — either we hire the 4 ML engineers and accept higher burn, or we defer the AI roadmap by a quarter. I'd like to align with the CEO before we post any new requisitions. Let's discuss in the leadership sync tomorrow. Please come prepared with priority rankings for all 7 open roles.",
+      "timestamp": "2024-01-15T09:30:00Z",
+      "thread_id": "thread_004",
+      "attachments": ["q1_hiring_plan.xlsx"]
+    },
+    {
+      "id": "email_005",
+      "subject": "Customer feedback digest — January week 2",
+      "sender": "product-analytics@company.com",
+      "body": "Weekly customer feedback summary:\n\n📊 NPS: 42 (down from 47 last week)\n📣 Top 3 complaints:\n1. Dashboard loading times (mentioned 34 times)\n2. Export feature broken (mentioned 28 times — KNOWN BUG #8834)\n3. Mobile app crashes on Android 14 (mentioned 15 times — NEW)\n\n💡 Top feature requests:\n1. Slack integration (89 votes)\n2. Custom dashboards (67 votes)\n3. API v2 with GraphQL (52 votes)\n\nFull report: https://internal.company.com/feedback/weekly",
+      "timestamp": "2024-01-15T10:00:00Z",
+      "thread_id": "thread_005",
+      "attachments": []
+    },
+    {
+      "id": "email_006",
+      "subject": "Fwd: Data export issue — extremely frustrated",
+      "sender": "enterprise-support@company.com",
+      "body": "Forwarding another escalation about the data export bug. This is from ClearView Analytics ($1.8M ARR, Enterprise tier). Their CFO personally emailed our CEO about this yesterday. They say the broken export has prevented them from filing a regulatory report and they're now facing potential compliance penalties. They've given us until Friday to fix it or they're invoking the SLA penalty clause. This is the same issue as BlueStar reported (Bug #8834). Marking as critical — two enterprise customers impacted by the same bug.",
+      "timestamp": "2024-01-15T10:30:00Z",
+      "thread_id": "thread_004_dup",
+      "attachments": []
+    },
+    {
+      "id": "email_007",
+      "subject": "Re: Data export issue — workaround found",
+      "sender": "carlos.mendez@company.com",
+      "body": "Quick update on Bug #8834. I found the root cause — the January 12 deploy changed the CSV serializer's date format from ISO-8601 to Unix timestamps, which breaks our export parser. I have a one-line fix ready. However, I realized this also affects the JSON export path and possibly the scheduled report feature. I want to add regression tests before merging. PR should be ready by end of day today. Customers can use the JSON export as a temporary workaround in the meantime.",
+      "timestamp": "2024-01-15T10:45:00Z",
+      "thread_id": "thread_004_dup",
+      "attachments": []
+    },
+    {
+      "id": "email_008",
+      "subject": "Partnership opportunity — mutual NDA required",
+      "sender": "partnerships@company.com",
+      "body": "Hi team, Cloudflare has reached out about a potential infrastructure partnership. They want to explore integrating our platform into their Workers ecosystem. This could be huge for us — their distribution would give us access to 4M+ developers. However, they need us to sign a mutual NDA before sharing technical details. Legal has reviewed it and flagged two clauses that need modification (non-compete scope is too broad, and the IP assignment language is ambiguous). Should we push back on these clauses or sign as-is to keep momentum? Time-sensitive — they want the NDA back by Friday.",
+      "timestamp": "2024-01-15T11:00:00Z",
+      "thread_id": "thread_008",
+      "attachments": ["cloudflare_nda_draft.pdf"]
+    },
+    {
+      "id": "email_009",
+      "subject": "URGENT: Website defacement — marketing page compromised",
+      "sender": "trust-safety@company.com",
+      "body": "Our marketing website (www.company.com/solutions) has been defaced — the hero section now displays unauthorized content. This was reported by a customer 20 minutes ago. Initial investigation suggests a compromised CMS credential. We've taken the affected pages offline and are auditing all CMS access logs. Need engineering to verify no backend systems were accessed through the CMS. Also need comms team to prepare a statement in case media picks this up. War room: #incident-site-defacement.",
+      "timestamp": "2024-01-15T11:30:00Z",
+      "thread_id": "thread_009",
+      "attachments": []
+    },
+    {
+      "id": "email_010",
+      "subject": "Re: Server migration timeline — conflicting deadlines",
+      "sender": "marketing-head@company.com",
+      "body": "Jumping in on this thread. I understand the concern about the migration timing, but this campaign has been planned for 3 months and we've already committed media spend. Delaying the campaign is not an option — we'd lose $180K in non-refundable ad placements. Can engineering guarantee 99.9% uptime during and after the migration? If yes, I'm fine proceeding as planned. If not, the migration needs to move. Let's not make this a turf war — what does the data say about migration risk?",
+      "timestamp": "2024-01-15T12:00:00Z",
+      "thread_id": "thread_002",
+      "attachments": []
+    }
+  ],
+  "ground_truth": {
+    "email_001": {
+      "category": "spam",
+      "team": "support",
+      "escalate": false,
+      "response_hint": "This is a phishing attempt. Report to IT security and do not click any links.",
+      "is_phishing": true
+    },
+    "email_002": {
+      "category": "urgent",
+      "team": "engineering",
+      "escalate": true,
+      "response_hint": "Escalate to leadership for a decision on migration vs. campaign timing by Thursday.",
+      "is_phishing": false
+    },
+    "email_003": {
+      "category": "urgent",
+      "team": "engineering",
+      "escalate": true,
+      "response_hint": "Join the incident channel and escalate to Stripe enterprise support immediately.",
+      "is_phishing": false
+    },
+    "email_004": {
+      "category": "normal",
+      "team": "exec",
+      "escalate": false,
+      "response_hint": "Prepare priority rankings for the leadership sync tomorrow.",
+      "is_phishing": false
+    },
+    "email_005": {
+      "category": "normal",
+      "team": "engineering",
+      "escalate": false,
+      "response_hint": "Review the feedback digest and note the new Android 14 crash issue.",
+      "is_phishing": false
+    },
+    "email_006": {
+      "category": "urgent",
+      "team": "support",
+      "escalate": true,
+      "response_hint": "Escalate Bug #8834 as critical — two enterprise customers impacted with SLA risk.",
+      "is_phishing": false
+    },
+    "email_007": {
+      "category": "normal",
+      "team": "engineering",
+      "escalate": false,
+      "response_hint": "Acknowledge workaround and confirm PR timeline for Bug #8834 fix.",
+      "is_phishing": false
+    },
+    "email_008": {
+      "category": "normal",
+      "team": "exec",
+      "escalate": false,
+      "response_hint": "Push back on the NDA clauses legal flagged before signing.",
+      "is_phishing": false
+    },
+    "email_009": {
+      "category": "urgent",
+      "team": "engineering",
+      "escalate": true,
+      "response_hint": "Join the war room and verify no backend systems were compromised via CMS.",
+      "is_phishing": false
+    },
+    "email_010": {
+      "category": "urgent",
+      "team": "exec",
+      "escalate": true,
+      "response_hint": "Facilitate a decision between engineering and marketing on migration timing.",
+      "is_phishing": false
+    }
+  }
+}

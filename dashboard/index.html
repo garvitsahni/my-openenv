@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WorkBench Cyber HUD [V5]</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #030303; color: white; font-family: 'JetBrains Mono', monospace; }
+        .cyber-card { border: 1px solid rgba(0, 242, 255, 0.2); background: rgba(10, 10, 10, 0.95); }
+        .grid-bg { background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px); background-size: 30px 30px; }
+        .scanline { width: 100%; height: 100%; background: linear-gradient(0deg, transparent 0%, rgba(0,242,255,0.05) 50%, transparent 100%); background-size: 100% 4px; pointer-events: none; position: fixed; top:0; left:0; }
+    </style>
+</head>
+<body class="grid-bg min-h-screen">
+    <div class="scanline"></div>
+    <div class="max-w-7xl mx-auto p-12 space-y-10 relative z-10">
+        <div class="flex justify-between items-end border-b-2 border-cyan-500/20 pb-8">
+            <div><h1 class="text-6xl font-black italic text-cyan-400">HUD://ACTIVE_SYNC</h1><p class="text-[10px] text-cyan-500/50 mt-2 uppercase tracking-[0.4em]">Grid Status: Stable | Core Online</p></div>
+            <div class="bg-cyan-500 text-black px-6 py-1 text-xs font-bold animate-pulse tracking-widest">REALTIME</div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-8">
+            <div class="cyber-card p-6 border-b-4 border-cyan-500">
+                <div class="text-[10px] text-zinc-500 mb-2 uppercase">Work Units</div>
+                <div id="stat-units" class="text-4xl font-bold text-cyan-400">0.00</div>
+            </div>
+            <div class="cyber-card p-6 border-b-4 border-cyan-500">
+                <div class="text-[10px] text-zinc-500 mb-2 uppercase">Mean Score</div>
+                <div id="stat-score" class="text-4xl font-bold text-cyan-400">0.00</div>
+            </div>
+            <div class="cyber-card p-6 border-b-4 border-pink-500">
+                <div class="text-[10px] text-zinc-500 mb-2 uppercase">Pass Rate</div>
+                <div id="stat-pass" class="text-4xl font-bold text-pink-500">0.00</div>
+            </div>
+            <div class="cyber-card p-6 border-b-4 border-pink-500">
+                <div class="text-[10px] text-zinc-500 mb-2 uppercase">Peak Score</div>
+                <div id="stat-best" class="text-4xl font-bold text-pink-500">0.00</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-8">
+            <div class="col-span-2 cyber-card p-8 h-[400px]"><canvas id="revenueChart"></canvas></div>
+            <div class="cyber-card p-8 flex flex-col">
+                <h3 class="text-pink-500 text-xs mb-8 uppercase tracking-widest border-l-2 border-pink-500 pl-4">Episode Logs</h3>
+                <div id="order-feed" class="space-y-4 overflow-y-auto flex-1 pr-4 custom-scroll"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: { labels: [], datasets: [{ data: [], borderColor: '#00f2ff', tension: 0.1, borderWidth: 3, fill: true, backgroundColor: 'rgba(0,242,255,0.05)', pointRadius: 4 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { min: 0, max: 1, grid: { color: 'rgba(255,255,255,0.05)' } } } }
+        });
+
+        async function sync() {
+            try {
+                const res = await fetch('/dashboard/data');
+                const d = await res.json();
+                
+                document.getElementById('stat-units').innerText = d.stats?.total || 0;
+                document.getElementById('stat-score').innerText = (d.stats?.avg_score || 0).toFixed(2);
+                document.getElementById('stat-pass').innerText = (d.stats?.pass_rate || 0) + '%';
+                document.getElementById('stat-best').innerText = (d.stats?.best_score || 0).toFixed(2);
+
+                const feed = document.getElementById('order-feed');
+                if (d.completed_episodes?.length) {
+                    feed.innerHTML = d.completed_episodes.map(ep => `
+                        <div class="flex justify-between items-center py-3 border-b border-white/5">
+                            <div><div class="text-xs font-bold text-cyan-400">${ep.final_score.toFixed(2)}</div><div class="text-[9px] text-zinc-600 uppercase font-bold">${ep.env_type} // ${ep.difficulty}</div></div>
+                            <div class="text-[10px] font-bold px-3 py-1 rounded-sm leading-none ${ep.status === 'PASS' ? 'bg-cyan-500/10 text-cyan-500' : 'bg-pink-500/10 text-pink-500'}">${ep.status}</div>
+                        </div>
+                    `).join('');
+
+                    chart.data.labels = d.completed_episodes.map((_, i) => i);
+                    chart.data.datasets[0].data = d.completed_episodes.map(ep => ep.final_score);
+                    chart.update();
+                } else {
+                    feed.innerHTML = '<div class="text-zinc-700 italic text-sm text-center py-10 tracking-widest">WAITING_FOR_DATA_SIGNAL</div>';
+                }
+            } catch(e) { console.error("HUD Dropout", e); }
+        }
+        setInterval(sync, 1000);
+        sync();
+    </script>
+</body>
+</html>

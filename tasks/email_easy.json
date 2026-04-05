@@ -1,0 +1,62 @@
+{
+  "metadata": {
+    "difficulty": "easy",
+    "seed": 42,
+    "max_steps": 30,
+    "passing_score": 0.7
+  },
+  "emails": [
+    {
+      "id": "email_001",
+      "subject": "CRITICAL - Production database is down",
+      "sender": "server-alerts@company.com",
+      "body": "The main production database has been unresponsive for 10 minutes. All customer orders are failing. Immediate action required.",
+      "timestamp": "2024-01-15T09:00:00Z",
+      "thread_id": "thread_001",
+      "attachments": []
+    },
+    {
+      "id": "email_002",
+      "subject": "See who viewed your profile this week",
+      "sender": "newsletter@linkedin.com",
+      "body": "You had 14 profile views this week. Upgrade to Premium to see who.",
+      "timestamp": "2024-01-15T08:30:00Z",
+      "thread_id": "thread_002",
+      "attachments": []
+    },
+    {
+      "id": "email_003",
+      "subject": "Team lunch Friday?",
+      "sender": "sarah.jones@company.com",
+      "body": "Hey! Thinking of organizing a team lunch this Friday at 1pm. Let me know if you can make it. No pressure!",
+      "timestamp": "2024-01-15T08:00:00Z",
+      "thread_id": "thread_003",
+      "attachments": []
+    },
+    {
+      "id": "email_004",
+      "subject": "Q4 sales report attached",
+      "sender": "reports@company.com",
+      "body": "Please find the Q4 sales report attached for your review. No immediate action needed.",
+      "timestamp": "2024-01-15T07:45:00Z",
+      "thread_id": "thread_004",
+      "attachments": ["q4_report.pdf"]
+    },
+    {
+      "id": "email_005",
+      "subject": "Customer complaint - Order #4821",
+      "sender": "support@helpdesk.com",
+      "body": "A customer is reporting that order #4821 has not arrived after 2 weeks. They are requesting an urgent update.",
+      "timestamp": "2024-01-15T07:30:00Z",
+      "thread_id": "thread_005",
+      "attachments": []
+    }
+  ],
+  "ground_truth": {
+    "email_001": { "category": "urgent", "team": "engineering", "escalate": true, "is_phishing": false, "response_hint": "Escalating to on-call engineering team immediately." },
+    "email_002": { "category": "spam", "team": null, "escalate": false, "is_phishing": false, "response_hint": null },
+    "email_003": { "category": "normal", "team": null, "escalate": false, "is_phishing": false, "response_hint": null },
+    "email_004": { "category": "archive", "team": "sales", "escalate": false, "is_phishing": false, "response_hint": null },
+    "email_005": { "category": "urgent", "team": "support", "escalate": true, "is_phishing": false, "response_hint": "Investigating order #4821 and will update customer within 2 hours." }
+  }
+}
