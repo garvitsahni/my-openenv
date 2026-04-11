@@ -37,8 +37,8 @@ TASKS = [
 ]
 
 def emit_block(tag: str, payload: dict) -> None:
-    print(tag, flush=True)
-    print(json.dumps(payload), flush=True)
+    parts = [f"{k}={payload[k]}" for k in payload]
+    print(f"{tag} " + " ".join(parts), flush=True)
 
 
 def _build_url(path: str) -> str:
@@ -179,10 +179,10 @@ For done: args = {}"""
     return prompt
 
 def run_task(task_id: str, env_type: str):
-    emit_block("[START]", {"task_id": task_id, "env_type": env_type})
+    emit_block("[START]", {"task": task_id, "env": env_type})
     status_code, text, data = _http_request("POST", f"/reset?env_type={env_type}", {"task_id": task_id, "seed": 42})
     if status_code != 200 or not isinstance(data, dict):
-        emit_block("[END]", {"task_id": task_id, "env_type": env_type, "status": "reset_failed", "error": text})
+        emit_block("[END]", {"task": task_id, "env": env_type, "status": "reset_failed"})
         return
 
     obs = data["observation"]
@@ -221,13 +221,12 @@ def run_task(task_id: str, env_type: str):
             f.write(json.dumps(log) + "\n")
             history.append(log)
             emit_block("[STEP]", {
-                "task_id": task_id,
-                "env_type": env_type,
-                "episode_id": episode_id,
+                "task": task_id,
+                "env": env_type,
                 "step": step,
-                "action": action,
+                "action": action.get("action_type", "unknown"),
                 "reward": reward,
-                "cumulative_score": cum_score,
+                "score": cum_score,
                 "done": done,
             })
             
@@ -241,10 +240,11 @@ def run_task(task_id: str, env_type: str):
         pass
     
     emit_block("[END]", {
-        "task_id": task_id,
-        "env_type": env_type,
-        "episode_id": episode_id,
-        "final_score": final_score["final_score"],
+        "task": task_id,
+        "env": env_type,
+        "score": final_score["final_score"],
+        "steps": step,
+        "status": "ok",
     })
 
 if __name__ == "__main__":
