@@ -68,7 +68,9 @@ jobs:
           rsync -av --delete \
             --exclude ".git/" \
             --exclude ".github/" \
-            "workbench/" "hf-space/"
+            --exclude "__pycache__/" \
+            --exclude ".pytest_cache/" \
+            "./" "hf-space/"
 
       - name: Commit and push if changed
         working-directory: hf-space
