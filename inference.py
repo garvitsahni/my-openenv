@@ -339,7 +339,7 @@ def run_task(task_id: str, env_type: str) -> None:
                     "step": step,
                     "action": action.get("action_type", "unknown"),
                     "reward": reward,
-                    "score": cum_score,
+                    "score": min(max(float(cum_score), 0.001), 0.999),
                     "done": done,
                 })
 
