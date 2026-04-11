@@ -19,8 +19,21 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          if [ -z "$HF_TOKEN" ]; then
+          HF_TOKEN_CLEAN="$(printf '%s' "$HF_TOKEN" | tr -d '[:space:]')"
+          if [ -z "$HF_TOKEN_CLEAN" ]; then
             echo "Missing repo secret HF_TOKEN"
+            exit 1
+          fi
+          if [[ "$HF_TOKEN_CLEAN" != hf_* ]]; then
+            echo "HF_TOKEN does not look like a Hugging Face token (must start with hf_)"
+            exit 1
+          fi
+          STATUS_CODE="$(curl -s -o /tmp/hf_whoami.json -w "%{http_code}" \
+            -H "Authorization: Bearer ${HF_TOKEN_CLEAN}" \
+            https://huggingface.co/api/whoami-v2)"
+          if [ "$STATUS_CODE" != "200" ]; then
+            echo "HF_TOKEN authentication failed (whoami-v2 status: $STATUS_CODE)"
+            cat /tmp/hf_whoami.json || true
             exit 1
           fi
 
@@ -37,8 +50,7 @@ jobs:
             echo "HF_TOKEN is empty after sanitizing whitespace"
             exit 1
           fi
-          git -c http.extraHeader="AUTHORIZATION: Bearer ${HF_TOKEN_CLEAN}" \
-            clone "https://huggingface.co/spaces/${HF_SPACE_ID}" hf-space
+          git clone "https://user:${HF_TOKEN_CLEAN}@huggingface.co/spaces/${HF_SPACE_ID}" hf-space
 
       - name: Sync app files to Space
         run: |
@@ -61,4 +73,4 @@ jobs:
             exit 0
           fi
           git commit -m "Deploy from GitHub ${GITHUB_SHA}"
-          git -c http.extraHeader="AUTHORIZATION: Bearer ${HF_TOKEN_CLEAN}" push origin main
+          git push origin main
