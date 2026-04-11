@@ -32,12 +32,13 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          HF_TOKEN_CLEAN="$(printf '%s' "$HF_TOKEN" | tr -d '\r\n')"
+          HF_TOKEN_CLEAN="$(printf '%s' "$HF_TOKEN" | tr -d '[:space:]')"
           if [ -z "$HF_TOKEN_CLEAN" ]; then
-            echo "HF_TOKEN is empty after sanitizing line breaks"
+            echo "HF_TOKEN is empty after sanitizing whitespace"
             exit 1
           fi
-          git clone "https://oauth2:${HF_TOKEN_CLEAN}@huggingface.co/spaces/${HF_SPACE_ID}" hf-space
+          git -c http.extraHeader="AUTHORIZATION: Bearer ${HF_TOKEN_CLEAN}" \
+            clone "https://huggingface.co/spaces/${HF_SPACE_ID}" hf-space
 
       - name: Sync app files to Space
         run: |
@@ -48,7 +49,10 @@ jobs:
 
       - name: Commit and push if changed
         working-directory: hf-space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
+          HF_TOKEN_CLEAN="$(printf '%s' "$HF_TOKEN" | tr -d '[:space:]')"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
@@ -57,4 +61,4 @@ jobs:
             exit 0
           fi
           git commit -m "Deploy from GitHub ${GITHUB_SHA}"
-          git push origin main
+          git -c http.extraHeader="AUTHORIZATION: Bearer ${HF_TOKEN_CLEAN}" push origin main
