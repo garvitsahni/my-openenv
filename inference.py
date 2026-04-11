@@ -26,6 +26,17 @@ try:
 except KeyError:
     LLM_CLIENT = None
 
+def _proxy_chat_url() -> str | None:
+    base = os.environ.get("API_BASE_URL", "").strip()
+    if not base:
+        return None
+    base = base.rstrip("/")
+    if base.endswith("/chat/completions"):
+        return base
+    if base.endswith("/v1"):
+        return f"{base}/chat/completions"
+    return f"{base}/v1/chat/completions"
+
 TASKS = [
     ("email-triage-easy", "email"),
     ("email-triage-medium", "email"),
@@ -151,10 +162,35 @@ def call_with_retry(model: str, prompt: str, env_type: str, max_retries: int = 3
 
 
 def ensure_proxy_call(model: str) -> None:
+    api_key = os.environ.get("API_KEY", "").strip()
+    chat_url = _proxy_chat_url()
+    if api_key and chat_url:
+        try:
+            payload = {
+                "model": model,
+                "messages": [{"role": "user", "content": "Reply with ok"}],
+                "temperature": 0.0,
+                "max_tokens": 4,
+            }
+            req = urlrequest.Request(
+                chat_url,
+                data=json.dumps(payload).encode("utf-8"),
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {api_key}",
+                },
+                method="POST",
+            )
+            with urlrequest.urlopen(req, timeout=20):
+                pass
+            return
+        except Exception:
+            pass
+
     if LLM_CLIENT is None:
         return
     try:
-        # Make at least one observable request through the injected proxy key.
+        # Fallback via OpenAI SDK using the same injected proxy env vars.
         LLM_CLIENT.chat.completions.create(
             model=model,
             messages=[{"role": "user", "content": "Return exactly: ok"}],
