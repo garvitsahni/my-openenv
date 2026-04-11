@@ -77,4 +77,5 @@ class EmailTriageGrader:
 
     def score_episode(self, step_results: list[EmailGraderResult]) -> float:
         total = sum(r.score for r in step_results)
-        return total
+        normalized = total / 0.85
+        return max(0.01, min(0.99, normalized))
