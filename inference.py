@@ -36,6 +36,10 @@ TASKS = [
     ("hr-screening-adversarial", "hr")
 ]
 
+def emit_block(tag: str, payload: dict) -> None:
+    print(tag, flush=True)
+    print(json.dumps(payload), flush=True)
+
 
 def _build_url(path: str) -> str:
     return f"{SERVER_URL.rstrip('/')}{path}"
@@ -175,10 +179,10 @@ For done: args = {}"""
     return prompt
 
 def run_task(task_id: str, env_type: str):
-    print("[START] " + json.dumps({"task_id": task_id, "env_type": env_type}), flush=True)
+    emit_block("[START]", {"task_id": task_id, "env_type": env_type})
     status_code, text, data = _http_request("POST", f"/reset?env_type={env_type}", {"task_id": task_id, "seed": 42})
     if status_code != 200 or not isinstance(data, dict):
-        print("[END] " + json.dumps({"task_id": task_id, "env_type": env_type, "status": "reset_failed", "error": text}), flush=True)
+        emit_block("[END]", {"task_id": task_id, "env_type": env_type, "status": "reset_failed", "error": text})
         return
 
     obs = data["observation"]
@@ -216,7 +220,7 @@ def run_task(task_id: str, env_type: str):
             }
             f.write(json.dumps(log) + "\n")
             history.append(log)
-            print("[STEP] " + json.dumps({
+            emit_block("[STEP]", {
                 "task_id": task_id,
                 "env_type": env_type,
                 "episode_id": episode_id,
@@ -225,7 +229,7 @@ def run_task(task_id: str, env_type: str):
                 "reward": reward,
                 "cumulative_score": cum_score,
                 "done": done,
-            }), flush=True)
+            })
             
     # Print true final score if any last-step bonuses were applied in env
     final_score = {"final_score": cum_score}
@@ -236,17 +240,14 @@ def run_task(task_id: str, env_type: str):
     except Exception:
         pass
     
-    print("[END] " + json.dumps({
+    emit_block("[END]", {
         "task_id": task_id,
         "env_type": env_type,
         "episode_id": episode_id,
         "final_score": final_score["final_score"],
-    }), flush=True)
+    })
 
 if __name__ == "__main__":
-    start = time.time()
     for t_id, t_env in TASKS:
-        # Avoid hammering fast requests immediately if free tier, but here we just blast it normally 
         run_task(t_id, t_env)
-        time.sleep(10) # increased sleep to avoid rate limits
-    print(f"Total runtime: {time.time()-start:.2f}s")
+        time.sleep(10)
