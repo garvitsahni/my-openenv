@@ -244,7 +244,7 @@ def run_task(task_id: str, env_type: str) -> None:
     if status_code != 200 or not isinstance(data, dict):
         print(f"Failed to reset: {text}", flush=True)
         # FIX 3: Still emit [END] even on reset failure so validator doesn't hang
-        emit_block("[END]", {"task": task_id, "env": env_type, "score": 0.0, "steps": 0, "status": "reset_failed"})
+        emit_block("[END]", {"task": task_id, "env": env_type, "score": 0.001, "steps": 0, "status": "reset_failed"})
         return
 
     obs = data.get("observation", {})
@@ -324,10 +324,12 @@ def run_task(task_id: str, env_type: str) -> None:
         pass
 
     # FIX 7: [END] block always emitted with flush=True
+    raw_score = final_score.get("final_score", 0.001)
+    safe_score = min(max(float(raw_score), 0.001), 0.999)
     emit_block("[END]", {
         "task": task_id,
         "env": env_type,
-        "score": final_score.get("final_score", 0.0),
+        "score": safe_score,
         "steps": step,
         "status": "ok",
     })
@@ -347,7 +349,7 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"run_task {t_id} failed: {e}", flush=True)
             # FIX 8: Emit [END] even if run_task itself throws so validator never hangs
-            emit_block("[END]", {"task": t_id, "env": t_env, "score": 0.0, "steps": 0, "status": "error"})
+            emit_block("[END]", {"task": t_id, "env": t_env, "score": 0.001, "steps": 0, "status": "error"})
         time.sleep(2)
 
     print(f"Total runtime: {time.time() - start:.2f}s", flush=True)

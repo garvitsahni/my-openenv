@@ -82,4 +82,4 @@ class HRScreeningGrader:
 
     def score_episode(self, step_results: list[HRGraderResult]) -> float:
         total = sum(r.score for r in step_results)
-        return max(0.01, min(0.99, total))
+        return max(0.001, min(0.999, total))
