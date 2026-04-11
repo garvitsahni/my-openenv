@@ -5,7 +5,11 @@ import re
 from typing import Any
 from urllib import error as urlerror
 from urllib import request as urlrequest
-import litellm
+
+try:
+    import litellm
+except ImportError:
+    litellm = None
 
 try:
     from dotenv import load_dotenv
@@ -122,17 +126,30 @@ def call_with_retry(model: str, prompt: str, env_type: str, max_retries: int = 3
     
     for _ in range(max_retries):
         try:
-            if api_key:
-                litellm.api_key = api_key
-            if api_base:
-                litellm.api_base = api_base
-                
-            response = litellm.completion(
-                model=model,
-                messages=[{"role": "user", "content": current_prompt}],
-                temperature=0.0,
-            )
-            raw = response.choices[0].message.content or ""
+            if litellm:
+                if api_key:
+                    litellm.api_key = api_key
+                if api_base:
+                    litellm.api_base = api_base
+                    
+                response = litellm.completion(
+                    model=model,
+                    messages=[{"role": "user", "content": current_prompt}],
+                    temperature=0.0,
+                )
+                raw = response.choices[0].message.content or ""
+            else:
+                import openai
+                client = openai.OpenAI(
+                    api_key=api_key or "dummy-key",
+                    base_url=api_base if api_base else None
+                )
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[{"role": "user", "content": current_prompt}],
+                    temperature=0.0,
+                )
+                raw = response.choices[0].message.content or ""
             parsed = parse_action(raw)
             if parsed and validate_action(parsed, env_type):
                 return parsed
@@ -189,16 +206,29 @@ def ensure_proxy_call(model: str) -> None:
 
     try:
         api_base = os.environ.get("API_BASE_URL", "")
-        if api_key:
-            litellm.api_key = api_key
-        if api_base:
-            litellm.api_base = api_base
-        litellm.completion(
-            model=model,
-            messages=[{"role": "user", "content": "Return exactly: ok"}],
-            temperature=0.0,
-            max_tokens=4,
-        )
+        if litellm:
+            if api_key:
+                litellm.api_key = api_key
+            if api_base:
+                litellm.api_base = api_base
+            litellm.completion(
+                model=model,
+                messages=[{"role": "user", "content": "Return exactly: ok"}],
+                temperature=0.0,
+                max_tokens=4,
+            )
+        else:
+            import openai
+            client = openai.OpenAI(
+                api_key=api_key or "dummy-key",
+                base_url=api_base if api_base else None
+            )
+            client.chat.completions.create(
+                model=model,
+                messages=[{"role": "user", "content": "Return exactly: ok"}],
+                temperature=0.0,
+                max_tokens=4,
+            )
     except Exception:
         pass
 
