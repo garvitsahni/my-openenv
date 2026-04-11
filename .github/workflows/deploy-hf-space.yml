@@ -1,0 +1,93 @@
+name: Deploy to Hugging Face Space
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      HF_SPACE_ID: Garvit0012/my-openenv
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate required config
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          HF_TOKEN_CLEAN="$(printf '%s' "$HF_TOKEN" | tr -d '[:space:]')"
+          if [ -z "$HF_TOKEN_CLEAN" ]; then
+            echo "Missing repo secret HF_TOKEN"
+            exit 1
+          fi
+          if [[ "$HF_TOKEN_CLEAN" != hf_* ]]; then
+            echo "HF_TOKEN does not look like a Hugging Face token (must start with hf_)"
+            exit 1
+          fi
+          STATUS_CODE="$(curl -s -o /tmp/hf_whoami.json -w "%{http_code}" \
+            -H "Authorization: Bearer ${HF_TOKEN_CLEAN}" \
+            https://huggingface.co/api/whoami-v2)"
+          if [ "$STATUS_CODE" != "200" ]; then
+            echo "HF_TOKEN authentication failed (whoami-v2 status: $STATUS_CODE)"
+            cat /tmp/hf_whoami.json || true
+            exit 1
+          fi
+
+      - name: Install Git LFS
+        run: |
+          git lfs install
+
+      - name: Debug clone URL
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          HF_TOKEN_CLEAN="$(printf '%s' "$HF_TOKEN" | tr -d '[:space:]')"
+          STATUS=$(curl -s -o /tmp/space_check.json -w "%{http_code}" \
+            -H "Authorization: Bearer ${HF_TOKEN_CLEAN}" \
+            "https://huggingface.co/api/spaces/${HF_SPACE_ID}")
+          echo "Space API status: $STATUS"
+          cat /tmp/space_check.json
+
+      - name: Clone Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          HF_TOKEN_CLEAN="$(printf '%s' "$HF_TOKEN" | tr -d '[:space:]')"
+          if [ -z "$HF_TOKEN_CLEAN" ]; then
+            echo "HF_TOKEN is empty after sanitizing whitespace"
+            exit 1
+          fi
+          git clone "https://user:${HF_TOKEN_CLEAN}@huggingface.co/spaces/${HF_SPACE_ID}" hf-space
+
+      - name: Sync app files to Space
+        run: |
+          rsync -av --delete \
+            --exclude ".git/" \
+            --exclude ".github/" \
+            --exclude "hf-space/" \
+            --exclude "__pycache__/" \
+            --exclude ".pytest_cache/" \
+            "./" "hf-space/" || rc=$?
+          if [ "${rc:-0}" -ne 0 ] && [ "${rc:-0}" -ne 24 ]; then
+            exit "${rc}"
+          fi
+
+      - name: Commit and push if changed
+        working-directory: hf-space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          HF_TOKEN_CLEAN="$(printf '%s' "$HF_TOKEN" | tr -d '[:space:]')"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to deploy."
+            exit 0
+          fi
+          git commit -m "Deploy from GitHub ${GITHUB_SHA}"
+          git push origin main

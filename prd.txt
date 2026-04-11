@@ -1,0 +1,448 @@
+
+WORKBENCH
+AI Agent Training Environment Platform
+Product Requirements Document  ·  Hackathon Edition
+
+
+
+1. Executive Summary
+VISION  WorkBench is the missing infrastructure layer for AI agent research — a community-curated, OpenEnv-compliant library of real-world training environments, each deployable in one click to Hugging Face Spaces.
+
+The AI agent research community has a fundamental infrastructure problem. Every team building LLM agents — whether at universities, startups, or enterprise labs — must first spend weeks constructing evaluation environments from scratch. These environments are incompatible, unreproducible, and nearly always simulate toy problems that bear no resemblance to real work.
+WorkBench solves this by providing three things in one submission: (1) a production-quality real-world training environment, (2) a fully compliant OpenEnv server, and (3) a reliable baseline inference script that runs deterministically on constrained hardware.
+
+
+2. Problem Statement
+2.1  The Core Problem
+Imagine you are a machine learning researcher who wants to train an LLM agent to handle a real-world task — triaging an inbox, reviewing code, or cleaning a messy CSV file. Before you can run a single training step, you must build the environment yourself: the state machine, the action space, the observation format, the reward function, the deployment scaffolding, and the evaluation harness. This typically takes two to three weeks.
+When your paper is published, nobody else can reproduce your results because they cannot recreate your environment. When another team builds a better agent, you cannot compare it to yours because they used a different environment. The field makes progress, but it cannot measure that progress reliably.
+2.2  Why Existing Solutions Fail
+
+2.3  Target Users
+ML researchers who need reproducible benchmarks they can cite in papers
+AI engineers at startups building agent-powered products and needing realistic pre-production test environments
+Open source contributors with domain expertise (customer support, data ops, compliance) who want to package it as a training asset
+Enterprise teams needing to evaluate and compare agent performance on internal workflows before deployment
+2.4  Pain Points
+
+3. Vision & Objectives
+NORTH STAR  Become the standard repository for AI agent training environments — the place where the community publishes, discovers, and benchmarks agents on real work, with fully reproducible scores.
+
+3.1  Product Objectives
+Ship three production-quality real-world environments (email triage, CSV data cleaning, code review), each with easy / medium / hard difficulty tiers
+Achieve full OpenEnv spec compliance — typed Pydantic models, step() / reset() / state() endpoints, openenv.yaml, openenv validate passing
+Implement deterministic graders that score 0.0–1.0 with partial credit at every step, not just end-of-episode
+Produce a baseline inference.py that completes a full episode in under 20 minutes on 2 vCPU / 8 GB RAM
+Deploy to Hugging Face Spaces via Docker with zero manual configuration
+3.2  Success Metrics (KPIs)
+
+4. User Personas
+Persona 1 — Riya, ML Researcher
+
+Persona 2 — Dev, AI Product Engineer
+
+Persona 3 — Mei, Open Source Contributor
+
+5. Features & Functional Requirements
+5.1  Core Features — Must Have
+
+5.2  Optional Features — Nice to Have
+
+6. System Architecture
+6.1  Architecture Overview (4 Layers)
+The system is organized into four layers. Each layer has a single responsibility and depends only on the layer below it.
+
+
+6.2  Data Flow
+1. Task seed JSON is loaded into the environment on POST /reset. Episode ID is generated and returned with the initial observation.
+2. The inference script reads observation + history, builds a structured prompt, calls the LLM, parses and validates the response, and sends the action to POST /step.
+3. POST /step dispatches the action to the environment state machine, updates episode state, runs the grader, and returns (observation, reward, done, info).
+4. All step data is appended to a JSONL session log. The episode continues until done=True or max_steps is reached.
+5. GET /score/{episode_id} returns the final score, per-step breakdown, and grader details for the complete episode.
+6.3  Component Responsibilities
+
+7. Technical Design
+7.1  API Endpoints
+
+7.2  Core Data Model
+
+7.3  Tech Stack
+
+8. Feasibility & Risks
+
+9. Business Model
+9.1  Value Proposition
+VALUE  WorkBench saves ML researchers 2–3 weeks per project and gives the community the shared benchmark baseline that AI agent research has been missing for 3 years.
+
+9.2  Revenue Streams (Post-Hackathon)
+
+9.3  Target Market
+
+10. Scalability & Future Scope
+10.1  Scaling Path
+Phase 1 (Hackathon): Single HF Space container per environment. All state in-process. Handles ~10 concurrent episodes.
+Phase 2 (Post-launch): Extract environment runtime and grader engine into stateless function-as-a-service (HF Inference Endpoints or AWS Lambda). Episode state migrates to Redis. This enables horizontal scaling to thousands of concurrent episodes without architecture rewrite — the API surface stays identical.
+Phase 3 (Scale): Multi-region deployment. CDN-cached task fixtures. Dedicated grader workers for compute-intensive tasks. Async episode execution for batch evaluation workflows.
+
+10.2  Future Enhancements
+
+11. Hackathon Execution Plan
+11.1  7-Day Build Schedule
+
+11.2  MVP Scope — Non-Negotiable
+SCOPE LOCK  If only one environment ships, it must be email triage — highest demo impact, clearest real-world utility, easiest for judges to understand instantly.
+
+Email triage environment with all three difficulty tiers (easy / medium / hard)
+Deterministic grader producing partial-credit scores at every step
+Working inference.py that runs end-to-end without error on all three tiers
+Docker build + HF Space deploy — live and pingable during judging
+openenv validate passing on the live HF Space URL
+README with environment description, action/observation space, and baseline scores
+
+11.3  Demo Script (4 Minutes)
+
+12. Master Build Prompt
+USAGE  The following prompt is engineered for maximum output quality when used with a capable LLM (GPT-4o, Claude Sonnet, or Gemini 1.5 Pro). Paste it exactly as written into a fresh conversation.
+
+12.1  Complete Master Prompt
+
+═══════════════════════════════════════════════════════════════════
+ WORKBENCH — COMPLETE HACKATHON BUILD PROMPT v1.0
+═══════════════════════════════════════════════════════════════════
+
+You are a Senior AI Engineer and Python architect. Your task is to
+build WorkBench: a complete, production-quality, OpenEnv-compliant
+AI agent training environment that wins a competitive hackathon.
+
+══ CONTEXT ══════════════════════════════════════════════════════
+Competition: Build a real-world OpenEnv environment deployable to
+Hugging Face Spaces. Judged on: real-world utility (30%), task &
+grader quality (25%), environment design (20%), code quality (15%),
+creativity (10%).
+
+Disqualification if any of these fail:
+  - HF Space does not deploy or respond
+  - openenv validate does not pass
+  - Dockerfile does not build cleanly
+  - inference.py fails or produces no scores
+  - Graders always return the same score
+
+══ ENVIRONMENT SPEC ═════════════════════════════════════════════
+Domain: Email Triage (simulate a real professional inbox)
+
+The agent receives a set of 10 emails and must:
+  - Classify each email (urgent / normal / spam / archive)
+  - Assign to correct team (engineering / sales / support / exec)
+  - Flag emails requiring escalation
+  - Draft a one-sentence response for urgent items
+
+Three task difficulties:
+  EASY   - Clear priorities, no ambiguity, obvious spam
+  MEDIUM - Some ambiguous priorities, one mislabeled thread
+  HARD   - Conflicting priorities, phishing disguised as urgent,
+           duplicate threads, ambiguous escalation criteria
+
+══ WHAT TO BUILD ════════════════════════════════════════════════
+
+Build the COMPLETE project. Do not give instructions — write code.
+
+1. PROJECT STRUCTURE
+   workbench/
+   ├── main.py              # FastAPI app — entry point
+   ├── openenv.yaml         # OpenEnv metadata
+   ├── inference.py         # Baseline inference script
+   ├── Dockerfile
+   ├── requirements.txt
+   ├── README.md
+   ├── env/
+   │   ├── __init__.py
+   │   ├── models.py        # Pydantic: Action, Observation, Reward
+   │   ├── environment.py   # EmailTriageEnv class
+   │   └── grader.py        # EmailTriageGrader class
+   ├── tasks/
+   │   ├── easy.json        # Task seed: easy tier
+   │   ├── medium.json      # Task seed: medium tier
+   │   └── hard.json        # Task seed: hard tier
+   └── tests/
+       ├── test_grader.py   # Golden-set grader tests
+       └── test_env.py      # Episode lifecycle tests
+
+2. env/models.py — PYDANTIC MODELS
+   Define strictly typed models:
+   - EmailAction(BaseModel): action_type: Literal[
+       'classify','assign','escalate','draft','skip','done']
+     args: dict with validated fields per action_type
+     episode_id: str
+   - EmailObservation(BaseModel): emails: list[Email]
+     step_count: int, remaining_steps: int,
+     available_actions: list[str], context: dict
+   - Email(BaseModel): id, subject, sender, body, timestamp,
+     thread_id, attachments: list
+   - GraderResult(BaseModel): score: float (0.0-1.0),
+     breakdown: dict, criteria_met: list[str],
+     max_possible: float
+
+3. env/environment.py — EMAIL TRIAGE ENVIRONMENT
+   class EmailTriageEnv:
+     def reset(task_id: str, seed: int = 42) -> EmailObservation:
+       Load task JSON, initialize episode state, return obs
+     def step(action: EmailAction) -> tuple[EmailObservation,
+               float, bool, dict]:
+       Validate action, update state, call grader,
+       return (obs, reward, done, info)
+     def state() -> dict:
+       Return full current state including episode metadata
+   Rules:
+   - Episode ends when agent calls 'done' or max_steps=30 reached
+   - Each action produces an immediate partial reward
+   - Observation always shows remaining emails and step count
+   - All state must be deterministic given same seed
+
+4. env/grader.py — DETERMINISTIC GRADER
+   class EmailTriageGrader:
+     def score_action(action, email, ground_truth) -> GraderResult:
+       Evaluate single action against rubric. Return partial credit.
+     def score_episode(episode_log) -> float:
+       Aggregate all step scores. Return final 0.0-1.0 score.
+   Grading rubric:
+   - Correct classification: +0.15 per email
+   - Correct team assignment: +0.10 per email
+   - Correct escalation flag: +0.10 per escalation-required email
+   - Response draft quality (easy+medium only): +0.05 per email
+   - Correctly identifying phishing as spam (hard only): +0.25 bonus
+   - PENALTY: flagging non-escalation as escalation: -0.05
+   - PENALTY: marking phishing as urgent: -0.15
+   All penalties and bonuses must be deterministic and rubric-based.
+
+5. tasks/*.json — TASK SEEDS
+   Generate realistic email fixtures for each difficulty level.
+   Each seed contains:
+   - 10 emails with realistic subjects, senders, body text
+   - ground_truth: { email_id: { category, team, escalate,
+                    response_hint } }
+   - metadata: { difficulty, seed, max_steps, passing_score }
+   Hard tier must include:
+   - 1 phishing email disguised as urgent IT request
+   - 2 emails with conflicting priority signals
+   - 1 duplicate thread (same issue, two senders)
+
+6. main.py — FASTAPI SERVER
+   Implement all 5 OpenEnv endpoints:
+   POST /reset  → { observation, episode_id, task }
+   POST /step   → { observation, reward, done, info }
+   GET  /state  → { state, step_count, cumulative_score }
+   GET  /tasks  → list of available tasks
+   GET  /score/{episode_id} → final score + breakdown
+   Also implement: GET /health (returns 200 for HF ping check)
+   Use dependency injection for environment instance.
+   Handle all validation errors with proper HTTP status codes.
+
+7. openenv.yaml
+   name: workbench-email-triage
+   version: 1.0.0
+   description: Real-world email triage environment for LLM agents
+   action_space: { type: discrete, actions: [classify, assign,
+                   escalate, draft, skip, done] }
+   observation_space: { type: structured, fields: [emails,
+                        step_count, available_actions] }
+   tasks: [easy, medium, hard]
+   reward_range: [-0.15, 0.25]  # min step reward, max step reward
+   max_steps: 30
+   tags: [email, triage, real-world, nlp]
+
+8. inference.py — BASELINE INFERENCE SCRIPT
+   Requirements:
+   - Must use OpenAI client: openai.OpenAI(base_url=..., api_key=...)
+   - Reads from env vars: API_BASE_URL, MODEL_NAME, HF_TOKEN
+   - Runs a full episode against all 3 difficulty tiers
+   - Prints per-step reward and final score for each tier
+   System prompt MUST enforce strict JSON output:
+     "You are an email triage agent. Respond with ONLY a single
+      JSON object matching this schema exactly, no other text:",
+     { "action_type": "<classify|assign|escalate|draft|skip|done>",
+       "args": { ... } }
+   Implement these 4 reliability features:
+   a) parse_action(raw): strips markdown fences, extracts JSON,
+      returns None on failure (do NOT raise)
+   b) validate_action(parsed): checks action_type in allowed list,
+      checks required args present for that action_type
+   c) call_with_retry(prompt, max_retries=3): on None/invalid,
+      appends error hint to prompt and retries. After 3 failures,
+      returns safe fallback: {'action_type': 'skip', 'args': {}}
+   d) build_prompt(obs, history): formats observation + last 3
+      steps as structured context. Ends with exact JSON schema.
+   Log every step to JSONL: step_number, action, reward,
+   cumulative_score, raw_response_preview (first 100 chars).
+   The script must complete ALL 3 tiers in under 20 minutes on
+   a 2 vCPU / 8 GB machine with no GPU.
+
+9. Dockerfile
+   FROM python:3.11-slim
+   WORKDIR /app
+   COPY requirements.txt .
+   RUN pip install --no-cache-dir -r requirements.txt
+   COPY . .
+   EXPOSE 7860
+   CMD ["uvicorn", "main:app", "--host", "0.0.0.0",
+        "--port", "7860"]
+   Image must build in < 5 minutes and be < 500 MB.
+
+10. tests/ — GOLDEN-SET TESTS
+    test_grader.py must include:
+    - test_perfect_easy(): all correct actions → score == 1.0
+    - test_all_wrong_easy(): all wrong actions → score < 0.2
+    - test_phishing_caught(): identifies phishing → bonus applied
+    - test_phishing_missed(): marks phishing urgent → penalty applied
+    - test_reproducibility(): same seed → same score, 10 runs
+    test_env.py must include:
+    - test_reset_deterministic(): same seed → same obs
+    - test_episode_lifecycle(): reset → 5 steps → done action
+    - test_max_steps_termination(): 30 steps → done=True auto
+
+══ QUALITY REQUIREMENTS ═════════════════════════════════════════
+
+CODE QUALITY:
+  - Type hints on all functions
+  - Docstrings on all public methods
+  - No bare except: clauses
+  - All constants in a config.py or at module top level
+  - No hardcoded API keys or credentials
+
+GRADER RULES (non-negotiable):
+  - Must be deterministic: same inputs → same score, always
+  - Must produce varying scores: easy > medium > hard expected
+  - Must not always return 0.5 or any constant
+  - All rubric weights must sum to a meaningful maximum
+
+INFERENCE SCRIPT RULES:
+  - Must complete without unhandled exceptions
+  - Must produce scores > 0.0 on at least easy tier
+  - Must not require human interaction
+  - All 3 tiers must run in sequence, scores printed to stdout
+
+README MUST INCLUDE:
+  - One-paragraph environment description
+  - Action space table (action_type, required args, description)
+  - Observation space table (field, type, description)
+  - Task descriptions for easy / medium / hard
+  - Baseline scores table (model, easy, medium, hard, runtime)
+  - Setup: docker build && docker run command
+  - Usage: 3-line Python example using requests library
+
+══ DELIVERY FORMAT ══════════════════════════════════════════════
+
+Deliver the complete project as follows:
+
+For each file, output:
+  --- FILE: path/to/file.ext ---
+  [complete file content, no truncation]
+
+Order of delivery:
+  1. openenv.yaml
+  2. requirements.txt
+  3. env/models.py
+  4. env/environment.py
+  5. env/grader.py
+  6. tasks/easy.json
+  7. tasks/medium.json
+  8. tasks/hard.json
+  9. main.py
+ 10. inference.py
+ 11. Dockerfile
+ 12. tests/test_grader.py
+ 13. tests/test_env.py
+ 14. README.md
+
+DO NOT:
+  - Truncate any file with '...' or '[rest of implementation]'
+  - Skip any file from the list
+  - Add placeholder comments — write working code
+  - Use subprocess or os.system in the main environment code
+  - Import anything not in requirements.txt
+
+Every file must be complete, runnable, and pass the tests.
+═══════════════════════════════════════════════════════════════════
+
+12.2  Follow-Up Prompt: Add CSV Data Cleaning Environment
+
+You have built the email triage environment. Now add a second
+environment: CSV Data Cleaning.
+
+The agent receives a malformed CSV (100 rows, 8 columns) and must:
+  - Identify rows with type errors (e.g. text in numeric column)
+  - Identify missing values and choose: fill, flag, or drop
+  - Detect and merge duplicate rows
+  - Correct column headers (spaces, casing, special chars)
+  - Validate final output against a schema
+
+Three difficulty tiers:
+  EASY   - 5 clear errors, correct column types, no duplicates
+  MEDIUM - 15 errors including nulls, 2 duplicates, 1 renamed col
+  HARD   - 30 errors, 5 duplicate rows, 2 malformed headers,
+           1 hidden encoding issue (latin-1 chars in UTF-8 col)
+
+Add to the existing project structure:
+  env/csv_environment.py   # CSVCleaningEnv class
+  env/csv_grader.py        # CSVCleaningGrader class
+  env/csv_models.py        # CSVAction, CSVObservation models
+  tasks/csv_easy.json
+  tasks/csv_medium.json
+  tasks/csv_hard.json
+  tests/test_csv_grader.py
+
+Update main.py to register the new environment alongside email
+triage. Update openenv.yaml to include csv-cleaning tasks.
+Update inference.py to run all 6 tasks (3 email + 3 CSV).
+Update README with CSV environment documentation.
+
+12.3  Debugging Prompt: Fix Failing Grader Tests
+
+The following grader test is failing:
+[PASTE FULL pytest output here]
+
+Rules you must follow when fixing:
+1. Do not change the test — fix the grader code
+2. The fix must be deterministic: same inputs → same output
+3. Do not change rubric weights unless the test explicitly
+   tests for a specific weight value
+4. Show the diff of what changed and explain why
+5. Re-run the full test suite mentally and confirm no
+   other tests break as a result of your fix
+
+12.4  Deployment Prompt: Docker + HF Space
+
+You have a working WorkBench project locally. Help me deploy it
+to Hugging Face Spaces as a Docker-based Space.
+
+Tasks:
+1. Review and optimize the Dockerfile for HF Spaces constraints:
+   - Port must be 7860
+   - Image must be < 500 MB
+   - Must start in < 30s on 2 vCPU
+   - No GPU dependencies
+
+2. Create a .huggingface/api_secrets.yaml template showing
+   which secrets to configure in the HF Space settings
+
+3. Write a pre-deployment checklist script (check.sh) that:
+   - Builds the Docker image locally
+   - Runs it and hits GET /health
+   - Runs POST /reset with task_id=email-triage-easy
+   - Runs openenv validate against localhost:7860
+   - Prints PASS or FAIL with reason for each check
+
+4. Write the exact huggingface_hub Python commands to:
+   - Create a new Space
+   - Upload all project files
+   - Set required secrets (API_BASE_URL, MODEL_NAME, HF_TOKEN)
+
+Constraints:
+  - All commands must be runnable without HF web UI
+  - Must use huggingface_hub Python library, not git clone
+  - Validate the deployed Space responds within 60s of deploy
+
+Appendix — Evaluation Scoring Reference
+The following table summarizes the competition's official evaluation criteria and scoring weights, used to prioritize build effort during the hackathon week.
+
+
+JUDGE TIP  Maximum judge impact: lead with the hard-tier demo. An agent scoring 0.42 without fixes vs 0.71 with them is the most powerful story — it proves the difficulty gradient works AND that your reliability improvements matter.
