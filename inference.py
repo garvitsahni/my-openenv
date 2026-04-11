@@ -1,18 +1,22 @@
 import os
 import json
 import time
-import httpx
 import re
 from typing import Any
-import litellm
-from dotenv import load_dotenv
-load_dotenv()
+from urllib import error as urlerror
+from urllib import request as urlrequest
+import openai
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:
+    # Keep running even if python-dotenv is unavailable in the validator image.
+    pass
 
 
 SERVER_URL = os.environ.get("API_BASE_URL", "http://localhost:7860")
 MODEL_NAME = os.environ.get("MODEL_NAME", "gemini/gemini-2.0-flash")
-
-http = httpx.Client(base_url=SERVER_URL, timeout=30.0)
 
 TASKS = [
     ("email-triage-easy", "email"),
@@ -28,6 +32,33 @@ TASKS = [
     ("hr-screening-hard", "hr"),
     ("hr-screening-adversarial", "hr")
 ]
+
+
+def _build_url(path: str) -> str:
+    return f"{SERVER_URL.rstrip('/')}{path}"
+
+
+def _http_request(method: str, path: str, payload: dict | None = None, timeout: float = 30.0) -> tuple[int, str, dict[str, Any] | None]:
+    body = None
+    headers = {}
+    if payload is not None:
+        body = json.dumps(payload).encode("utf-8")
+        headers["Content-Type"] = "application/json"
+
+    req = urlrequest.Request(_build_url(path), data=body, headers=headers, method=method)
+    try:
+        with urlrequest.urlopen(req, timeout=timeout) as resp:
+            text = resp.read().decode("utf-8", errors="replace")
+            try:
+                parsed = json.loads(text) if text else None
+            except json.JSONDecodeError:
+                parsed = None
+            return resp.status, text, parsed
+    except urlerror.HTTPError as e:
+        text = e.read().decode("utf-8", errors="replace")
+        return e.code, text, None
+    except Exception as e:
+        return 0, str(e), None
 
 def parse_action(raw_text: str) -> dict | None:
     text = raw_text.strip()
@@ -59,9 +90,13 @@ def validate_action(parsed: dict, env_type: str) -> bool:
 
 def call_with_retry(model: str, prompt: str, env_type: str, max_retries: int = 3) -> dict:
     current_prompt = prompt
+    client = openai.OpenAI(
+        base_url=os.environ.get("API_BASE_URL"),
+        api_key=os.environ.get("API_KEY", "dummy-key")
+    )
     for _ in range(max_retries):
         try:
-            response = litellm.completion(
+            response = client.chat.completions.create(
                 model=model,
                 messages=[{"role": "user", "content": current_prompt}],
                 temperature=0.0
@@ -140,12 +175,11 @@ For done: args = {}"""
 
 def run_task(task_id: str, env_type: str):
     print(f"--- Running {task_id} ({env_type}) ---")
-    resp = http.post(f"/reset?env_type={env_type}", json={"task_id": task_id, "seed": 42})
-    if resp.status_code != 200:
-        print("Failed to reset:", resp.text)
+    status_code, text, data = _http_request("POST", f"/reset?env_type={env_type}", {"task_id": task_id, "seed": 42})
+    if status_code != 200 or not isinstance(data, dict):
+        print("Failed to reset:", text)
         return
-        
-    data = resp.json()
+
     obs = data["observation"]
     episode_id = data["episode_id"]
     
@@ -160,12 +194,11 @@ def run_task(task_id: str, env_type: str):
             prompt = build_prompt(obs, history, env_type)
             action = call_with_retry(MODEL_NAME, prompt, env_type)
             
-            sresp = http.post("/step", json={"episode_id": episode_id, "action": action})
-            if sresp.status_code != 200:
-                print(f"FAILED STEP: {sresp.text} using {action}")
+            step_status, step_text, sdata = _http_request("POST", "/step", {"episode_id": episode_id, "action": action})
+            if step_status != 200 or not isinstance(sdata, dict):
+                print(f"FAILED STEP: {step_text} using {action}")
                 break
-                
-            sdata = sresp.json()
+
             obs = sdata["observation"]
             reward = sdata["reward"]
             done = sdata["done"]
@@ -187,9 +220,11 @@ def run_task(task_id: str, env_type: str):
     # Print true final score if any last-step bonuses were applied in env
     final_score = {"final_score": cum_score}
     try:
-        fsc = http.get(f"/score/{episode_id}").json()
-        final_score = fsc
-    except: pass
+        score_status, _, fsc = _http_request("GET", f"/score/{episode_id}", None)
+        if score_status == 200 and isinstance(fsc, dict) and "final_score" in fsc:
+            final_score = fsc
+    except Exception:
+        pass
     
     print(f"Task {task_id} Final Score: {final_score['final_score']:.2f}\n")
 
@@ -198,5 +233,5 @@ if __name__ == "__main__":
     for t_id, t_env in TASKS:
         # Avoid hammering fast requests immediately if free tier, but here we just blast it normally 
         run_task(t_id, t_env)
-        time.sleep(1) # tiny sleep to help dashboard update visually bridging episodes
+        time.sleep(10) # increased sleep to avoid rate limits
     print(f"Total runtime: {time.time()-start:.2f}s")

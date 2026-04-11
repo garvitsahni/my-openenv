@@ -3,7 +3,7 @@ from huggingface_hub import HfApi, create_repo
 
 def deploy_hf_space():
     api = HfApi()
-    repo_id = os.environ.get("HF_REPO_ID", "your-username/workbench-env") # Update with actual namespace
+    repo_id = os.environ.get("HF_REPO_ID", "Garvit0012/my-openenv")
     
     # Create the space if it doesn't exist
     print(f"Ensuring Space {repo_id} exists...")
@@ -13,15 +13,15 @@ def deploy_hf_space():
         print(f"Error creating/checking repo: {e}")
         return
 
-    # Upload files using standard api folder upload
+    # Upload app files from workbench root to Space root
     print("Uploading project files to Hugging Face...")
     try:
         api.upload_folder(
-            folder_path=".",
+            folder_path=os.path.dirname(__file__),
             repo_id=repo_id,
             repo_type="space",
             # Exclude tests and logs 
-            ignore_patterns=["*.jsonl", "tests/*", "output*", "extract_prd.py", ".pytest_cache/*", "__pycache__/*", ".env", "*.yaml"] 
+            ignore_patterns=["*.jsonl", "tests/*", "output*", "extract_prd.py", ".pytest_cache/*", "__pycache__/*", ".env"] 
         )
     except Exception as e:
         print(f"Error uploading files: {e}")

@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from fastapi import FastAPI, HTTPException
+from fastapi import Body, FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from typing import Any
@@ -15,15 +15,36 @@ from env.hr.environment import HRScreeningEnv
 from env.hr.models import HRAction
 
 app = FastAPI(title="WorkBench OpenEnv API")
+APP_VERSION = "2026-04-08-reset-optional-v2"
+
+# Keep browser console clean by sending a modern Permissions-Policy.
+# Deprecated/unknown directives can trigger noisy warnings in Chromium.
+PERMISSIONS_POLICY = "camera=(), microphone=(), geolocation=()"
+
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["Permissions-Policy"] = PERMISSIONS_POLICY
+    return response
 
 # In-memory episode tracking for the dashboard
 # Format: {"ep_id": {"env_type": "email", "difficulty": "easy", "step_count": 0, "max_steps": 30, "cumulative_score": 0.0, "passing_score": 0.5, "recent_actions": [], "done": False, "final_score": 0.0}}
 episodes_db = {}
 active_episode_id = None
 
-class ResetRequest(BaseModel):
-    task_id: str
-    seed: int = 42
+@app.get("/")
+def root():
+    return {
+        "name": "WorkBench OpenEnv API",
+        "status": "running",
+        "version": APP_VERSION,
+        "endpoints": ["/health", "/tasks", "/reset", "/step", "/state", "/score/{episode_id}", "/dashboard"]
+    }
+
+@app.get("/version")
+def version():
+    return {"version": APP_VERSION}
 
 def get_env_instance(env_type):
     if env_type == "email": return EmailTriageEnv()
@@ -32,16 +53,34 @@ def get_env_instance(env_type):
     raise HTTPException(status_code=400, detail="Invalid env_type")
 
 @app.post("/reset")
-def reset_env(req: ResetRequest, env_type: str = "email"):
+def reset_env(
+    env_type: str = "email",
+    task_id: str | None = None,
+    seed: int = 42,
+    body: dict | None = Body(default=None),
+):
     global active_episode_id
     try:
         env = get_env_instance(env_type)
-        obs = env.reset(req.task_id, req.seed)
+        if body:
+            task_id = body.get("task_id", task_id)
+            seed = body.get("seed", seed)
+
+        default_task_by_env = {
+            "email": "email-triage-easy",
+            "legal": "legal-review-easy",
+            "hr": "hr-screening-easy",
+        }
+        task_id = task_id or default_task_by_env.get(env_type)
+        if not task_id:
+            raise HTTPException(status_code=400, detail="Missing task_id")
+
+        obs = env.reset(task_id, seed)
         
-        episode_id = "ep_" + req.task_id
+        episode_id = "ep_" + task_id
         active_episode_id = episode_id
         
-        difficulty = req.task_id.split("-")[-1]
+        difficulty = task_id.split("-")[-1]
         passing_score = 0.5 # default
         if difficulty == "easy": passing_score = 0.7
         elif difficulty == "medium": passing_score = 0.65
@@ -51,7 +90,7 @@ def reset_env(req: ResetRequest, env_type: str = "email"):
             "episode_id": episode_id,
             "env_type": env_type,
             "difficulty": difficulty,
-            "task_id": req.task_id,
+            "task_id": task_id,
             "step_count": 0,
             "max_steps": env.max_steps,
             "cumulative_score": 0.0,
@@ -62,7 +101,7 @@ def reset_env(req: ResetRequest, env_type: str = "email"):
             "env_instance": env
         }
         
-        return {"observation": obs.model_dump(), "episode_id": episode_id, "task": {"id": req.task_id}}
+        return {"observation": obs.model_dump(), "episode_id": episode_id, "task": {"id": task_id}}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

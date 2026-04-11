@@ -1,6 +1,17 @@
+---
+title: WorkBench OpenEnv
+emoji: 🚀
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+sdk_version: "0.0.1"
+python_version: "3.11"
+app_file: app.py
+pinned: false
+---
 # WorkBench Multi-Environment Platform
 
-WorkBench is the missing infrastructure layer for AI agent research — a community-curated, OpenEnv-compliant library of real-world training environments, each deployable in one click to Hugging Face Spaces.
+WorkBench is the missing infrastructure layer for AI agent research â€” a community-curated, OpenEnv-compliant library of real-world training environments, each deployable in one click to Hugging Face Spaces.
 
 This repository features THREE highly detailed, real-world simulating endpoints:
 - Email Triage
@@ -93,3 +104,6 @@ import requests
 obs = requests.post("http://localhost:7860/reset?env_type=hr", json={"task_id": "hr-screening-adversarial"}).json()
 print("Observation: ", obs)
 ```
+
+
+

@@ -2,60 +2,219 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>WorkBench Cyber HUD [V5]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkBench - Enterprise Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #030303; color: white; font-family: 'JetBrains Mono', monospace; }
-        .cyber-card { border: 1px solid rgba(0, 242, 255, 0.2); background: rgba(10, 10, 10, 0.95); }
-        .grid-bg { background-image: linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px); background-size: 30px 30px; }
-        .scanline { width: 100%; height: 100%; background: linear-gradient(0deg, transparent 0%, rgba(0,242,255,0.05) 50%, transparent 100%); background-size: 100% 4px; pointer-events: none; position: fixed; top:0; left:0; }
+        body { 
+            background-color: #f8fafc; 
+            color: #0f172a; 
+            font-family: 'Inter', sans-serif; 
+            -webkit-font-smoothing: antialiased;
+        }
+        .premium-card { 
+            background: #ffffff; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.025);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .premium-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.025);
+            transform: translateY(-2px);
+        }
+        .stat-label { color: #64748b; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.02em; }
+        .stat-value { color: #0f172a; font-size: 2.25rem; font-weight: 700; letter-spacing: -0.02em; }
+        .status-badge-pass { background-color: #dcfce7; color: #166534; }
+        .status-badge-fail { background-color: #fee2e2; color: #991b1b; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(90deg, #3b82f6, #8b5cf6);
+        }
     </style>
 </head>
-<body class="grid-bg min-h-screen">
-    <div class="scanline"></div>
-    <div class="max-w-7xl mx-auto p-12 space-y-10 relative z-10">
-        <div class="flex justify-between items-end border-b-2 border-cyan-500/20 pb-8">
-            <div><h1 class="text-6xl font-black italic text-cyan-400">HUD://ACTIVE_SYNC</h1><p class="text-[10px] text-cyan-500/50 mt-2 uppercase tracking-[0.4em]">Grid Status: Stable | Core Online</p></div>
-            <div class="bg-cyan-500 text-black px-6 py-1 text-xs font-bold animate-pulse tracking-widest">REALTIME</div>
+<body class="min-h-screen p-8 lg:p-12">
+    <div class="max-w-7xl mx-auto space-y-8">
+        
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-10 border-b border-slate-200 pb-6">
+            <div class="flex items-center space-x-4">
+                <div class="h-10 w-10 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-xl flex items-center justify-center shadow-md">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900 tracking-tight">WorkBench Platform</h1>
+                    <p class="text-sm text-slate-500 font-medium">Performance Analytics Dashboard</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm">
+                <div class="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                <span class="text-sm font-medium text-slate-600">System Online</span>
+            </div>
+        </header>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="premium-card p-6 flex flex-col justify-between">
+                <div class="flex justify-between items-start">
+                    <span class="stat-label">Total Work Units</span>
+                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                </div>
+                <div class="mt-4 flex items-baseline">
+                    <div id="stat-units" class="stat-value">0</div>
+                </div>
+            </div>
+
+            <div class="premium-card p-6 flex flex-col justify-between">
+                <div class="flex justify-between items-start">
+                    <span class="stat-label">Mean Performance</span>
+                    <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                </div>
+                <div class="mt-4 flex items-baseline">
+                    <div id="stat-score" class="stat-value">0.00</div>
+                </div>
+            </div>
+
+            <div class="premium-card p-6 flex flex-col justify-between">
+                <div class="flex justify-between items-start">
+                    <span class="stat-label">Overall Pass Rate</span>
+                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <div class="mt-4 flex items-baseline">
+                    <div id="stat-pass" class="stat-value">0%</div>
+                </div>
+            </div>
+
+            <div class="premium-card p-6 flex flex-col justify-between">
+                <div class="flex justify-between items-start">
+                    <span class="stat-label">Peak Score</span>
+                    <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
+                </div>
+                <div class="mt-4 flex items-baseline">
+                    <div id="stat-best" class="stat-value">0.00</div>
+                </div>
+            </div>
         </div>
 
-        <div class="grid grid-cols-4 gap-8">
-            <div class="cyber-card p-6 border-b-4 border-cyan-500">
-                <div class="text-[10px] text-zinc-500 mb-2 uppercase">Work Units</div>
-                <div id="stat-units" class="text-4xl font-bold text-cyan-400">0.00</div>
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-4">
+            
+            <!-- Chart Section -->
+            <div class="premium-card p-8 lg:col-span-2">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-lg font-semibold text-slate-800">Performance Trend</h2>
+                    <select class="bg-slate-50 border border-slate-200 text-slate-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 outline-none">
+                        <option>Last 10 Episodes</option>
+                    </select>
+                </div>
+                <div class="h-[350px] w-full">
+                    <canvas id="performanceChart"></canvas>
+                </div>
             </div>
-            <div class="cyber-card p-6 border-b-4 border-cyan-500">
-                <div class="text-[10px] text-zinc-500 mb-2 uppercase">Mean Score</div>
-                <div id="stat-score" class="text-4xl font-bold text-cyan-400">0.00</div>
-            </div>
-            <div class="cyber-card p-6 border-b-4 border-pink-500">
-                <div class="text-[10px] text-zinc-500 mb-2 uppercase">Pass Rate</div>
-                <div id="stat-pass" class="text-4xl font-bold text-pink-500">0.00</div>
-            </div>
-            <div class="cyber-card p-6 border-b-4 border-pink-500">
-                <div class="text-[10px] text-zinc-500 mb-2 uppercase">Peak Score</div>
-                <div id="stat-best" class="text-4xl font-bold text-pink-500">0.00</div>
-            </div>
-        </div>
 
-        <div class="grid grid-cols-3 gap-8">
-            <div class="col-span-2 cyber-card p-8 h-[400px]"><canvas id="revenueChart"></canvas></div>
-            <div class="cyber-card p-8 flex flex-col">
-                <h3 class="text-pink-500 text-xs mb-8 uppercase tracking-widest border-l-2 border-pink-500 pl-4">Episode Logs</h3>
-                <div id="order-feed" class="space-y-4 overflow-y-auto flex-1 pr-4 custom-scroll"></div>
+            <!-- Recent Activity List -->
+            <div class="premium-card p-8 flex flex-col h-[466px]">
+                <h2 class="text-lg font-semibold text-slate-800 mb-6 flex items-center justify-between">
+                    Recent Episodes
+                    <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-full font-medium" id="activity-count">0</span>
+                </h2>
+                
+                <div id="order-feed" class="space-y-3 overflow-y-auto pr-2 custom-scroll flex-1">
+                    <div class="flex flex-col items-center justify-center h-full text-slate-400 space-y-4">
+                        <svg class="w-12 h-12 text-slate-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        <p class="text-sm font-medium">Awaiting evaluation data...</p>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 
     <script>
-        const ctx = document.getElementById('revenueChart').getContext('2d');
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        
+        let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.2)');
+        gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+
         const chart = new Chart(ctx, {
             type: 'line',
-            data: { labels: [], datasets: [{ data: [], borderColor: '#00f2ff', tension: 0.1, borderWidth: 3, fill: true, backgroundColor: 'rgba(0,242,255,0.05)', pointRadius: 4 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { min: 0, max: 1, grid: { color: 'rgba(255,255,255,0.05)' } } } }
+            data: { 
+                labels: [], 
+                datasets: [{ 
+                    label: 'Score',
+                    data: [], 
+                    borderColor: '#3b82f6', 
+                    backgroundColor: gradient,
+                    borderWidth: 2, 
+                    tension: 0.4, 
+                    fill: true, 
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#3b82f6',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }] 
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, 
+                plugins: { 
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1e293b',
+                        padding: 12,
+                        titleFont: { family: 'Inter', size: 13 },
+                        bodyFont: { family: 'Inter', size: 14, weight: 'bold' },
+                        displayColors: false,
+                        cornerRadius: 8
+                    }
+                }, 
+                scales: { 
+                    x: { 
+                        display: true,
+                        grid: { display: false, drawBorder: false },
+                        ticks: { font: { family: 'Inter', size: 11 }, color: '#94a3b8' }
+                    }, 
+                    y: { 
+                        min: 0, 
+                        max: 1, 
+                        grid: { color: '#f1f5f9', borderDash: [4, 4], drawBorder: false },
+                        ticks: { 
+                            font: { family: 'Inter', size: 11 }, 
+                            color: '#94a3b8',
+                            stepSize: 0.2,
+                            callback: function(value) { return value.toFixed(1); }
+                        }
+                    } 
+                },
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                }
+            }
         });
+
+        const statusDescriptions = {
+            'email': 'Email Triage',
+            'legal': 'Legal Review',
+            'hr': 'HR Screening'
+        };
+
+        const difficultyStyles = {
+            'easy': 'text-emerald-600 bg-emerald-50',
+            'medium': 'text-amber-600 bg-amber-50',
+            'hard': 'text-rose-600 bg-rose-50',
+            'adversarial': 'text-indigo-600 bg-indigo-50'
+        };
 
         async function sync() {
             try {
@@ -68,23 +227,40 @@
                 document.getElementById('stat-best').innerText = (d.stats?.best_score || 0).toFixed(2);
 
                 const feed = document.getElementById('order-feed');
+                
                 if (d.completed_episodes?.length) {
+                    document.getElementById('activity-count').innerText = d.completed_episodes.length;
+                    
                     feed.innerHTML = d.completed_episodes.map(ep => `
-                        <div class="flex justify-between items-center py-3 border-b border-white/5">
-                            <div><div class="text-xs font-bold text-cyan-400">${ep.final_score.toFixed(2)}</div><div class="text-[9px] text-zinc-600 uppercase font-bold">${ep.env_type} // ${ep.difficulty}</div></div>
-                            <div class="text-[10px] font-bold px-3 py-1 rounded-sm leading-none ${ep.status === 'PASS' ? 'bg-cyan-500/10 text-cyan-500' : 'bg-pink-500/10 text-pink-500'}">${ep.status}</div>
+                        <div class="px-4 py-3 bg-slate-50 rounded-xl border border-slate-100 hover:border-slate-200 transition-colors">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-semibold text-slate-800">${statusDescriptions[ep.env_type] || ep.env_type}</span>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${ep.status === 'PASS' ? 'status-badge-pass' : 'status-badge-fail'}">
+                                    ${ep.status}
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center mt-2">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-xs px-2 py-1 rounded font-medium ${difficultyStyles[ep.difficulty] || 'text-slate-600 bg-slate-100'} capitalize">
+                                        ${ep.difficulty}
+                                    </span>
+                                </div>
+                                <span class="font-mono font-semibold ${ep.final_score >= ep.passing_score ? 'text-emerald-600' : 'text-slate-900'}">
+                                    ${ep.final_score.toFixed(2)}
+                                </span>
+                            </div>
                         </div>
                     `).join('');
 
-                    chart.data.labels = d.completed_episodes.map((_, i) => i);
+                    chart.data.labels = d.completed_episodes.map((_, i) => \`Ep \${i+1}\`);
                     chart.data.datasets[0].data = d.completed_episodes.map(ep => ep.final_score);
                     chart.update();
-                } else {
-                    feed.innerHTML = '<div class="text-zinc-700 italic text-sm text-center py-10 tracking-widest">WAITING_FOR_DATA_SIGNAL</div>';
                 }
-            } catch(e) { console.error("HUD Dropout", e); }
+            } catch(e) { 
+                console.error("Dashboard Sync Error:", e); 
+            }
         }
-        setInterval(sync, 1000);
+        setInterval(sync, 1500);
         sync();
     </script>
 </body>
