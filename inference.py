@@ -5,7 +5,10 @@ import re
 from typing import Any
 from urllib import error as urlerror
 from urllib import request as urlrequest
-import litellm
+try:
+    import litellm
+except Exception:
+    litellm = None
 
 try:
     from dotenv import load_dotenv
@@ -92,6 +95,8 @@ def call_with_retry(model: str, prompt: str, env_type: str, max_retries: int = 3
     current_prompt = prompt
     for _ in range(max_retries):
         try:
+            if litellm is None:
+                raise RuntimeError("litellm is not installed")
             response = litellm.completion(
                 model=model,
                 messages=[{"role": "user", "content": current_prompt}],
@@ -170,10 +175,10 @@ For done: args = {}"""
     return prompt
 
 def run_task(task_id: str, env_type: str):
-    print(f"--- Running {task_id} ({env_type}) ---")
+    print("[START] " + json.dumps({"task_id": task_id, "env_type": env_type}), flush=True)
     status_code, text, data = _http_request("POST", f"/reset?env_type={env_type}", {"task_id": task_id, "seed": 42})
     if status_code != 200 or not isinstance(data, dict):
-        print("Failed to reset:", text)
+        print("[END] " + json.dumps({"task_id": task_id, "env_type": env_type, "status": "reset_failed", "error": text}), flush=True)
         return
 
     obs = data["observation"]
@@ -211,7 +216,16 @@ def run_task(task_id: str, env_type: str):
             }
             f.write(json.dumps(log) + "\n")
             history.append(log)
-            print(f"Step {step} - Reward: {reward:.2f} (Cum: {cum_score:.2f})")
+            print("[STEP] " + json.dumps({
+                "task_id": task_id,
+                "env_type": env_type,
+                "episode_id": episode_id,
+                "step": step,
+                "action": action,
+                "reward": reward,
+                "cumulative_score": cum_score,
+                "done": done,
+            }), flush=True)
             
     # Print true final score if any last-step bonuses were applied in env
     final_score = {"final_score": cum_score}
@@ -222,7 +236,12 @@ def run_task(task_id: str, env_type: str):
     except Exception:
         pass
     
-    print(f"Task {task_id} Final Score: {final_score['final_score']:.2f}\n")
+    print("[END] " + json.dumps({
+        "task_id": task_id,
+        "env_type": env_type,
+        "episode_id": episode_id,
+        "final_score": final_score["final_score"],
+    }), flush=True)
 
 if __name__ == "__main__":
     start = time.time()
