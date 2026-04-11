@@ -63,19 +63,6 @@ def reset_env(
 ):
     global active_episode_id
     try:
-        resolved_task_id = (req.task_id if req else None) or task_id
-        resolved_seed = req.seed if req else seed
-        if not resolved_task_id:
-            if env_type == "email":
-                resolved_task_id = "email-triage-easy"
-            elif env_type == "legal":
-                resolved_task_id = "legal-review-easy"
-            elif env_type == "hr":
-                resolved_task_id = "hr-screening-easy"
-            else:
-                raise HTTPException(status_code=400, detail="Invalid env_type")
-
-        env = get_env_instance(env_type)
         if body:
             task_id = body.get("task_id", task_id)
             seed = body.get("seed", seed)
@@ -87,8 +74,9 @@ def reset_env(
         }
         task_id = task_id or default_task_by_env.get(env_type)
         if not task_id:
-            raise HTTPException(status_code=400, detail="Missing task_id")
+            raise HTTPException(status_code=400, detail="Missing task_id or invalid env_type")
 
+        env = get_env_instance(env_type)
         obs = env.reset(task_id, seed)
         
         episode_id = "ep_" + task_id
