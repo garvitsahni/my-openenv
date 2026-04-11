@@ -5,10 +5,7 @@ import re
 from typing import Any
 from urllib import error as urlerror
 from urllib import request as urlrequest
-try:
-    import litellm
-except Exception:
-    litellm = None
+from openai import OpenAI
 
 try:
     from dotenv import load_dotenv
@@ -18,8 +15,11 @@ except Exception:
     pass
 
 
-SERVER_URL = os.environ.get("API_BASE_URL", "http://localhost:7860")
-MODEL_NAME = os.environ.get("MODEL_NAME", "gemini/gemini-2.0-flash")
+SERVER_URL = os.environ.get("ENV_BASE_URL", "http://localhost:7860")
+MODEL_NAME = os.environ.get("MODEL_NAME", "gpt-4o-mini")
+LLM_API_BASE_URL = os.environ.get("API_BASE_URL")
+LLM_API_KEY = os.environ.get("API_KEY")
+LLM_CLIENT = OpenAI(base_url=LLM_API_BASE_URL, api_key=LLM_API_KEY) if LLM_API_BASE_URL and LLM_API_KEY else None
 
 TASKS = [
     ("email-triage-easy", "email"),
@@ -99,14 +99,14 @@ def call_with_retry(model: str, prompt: str, env_type: str, max_retries: int = 3
     current_prompt = prompt
     for _ in range(max_retries):
         try:
-            if litellm is None:
-                raise RuntimeError("litellm is not installed")
-            response = litellm.completion(
+            if LLM_CLIENT is None:
+                raise RuntimeError("Missing API_BASE_URL/API_KEY for LLM proxy")
+            response = LLM_CLIENT.chat.completions.create(
                 model=model,
                 messages=[{"role": "user", "content": current_prompt}],
                 temperature=0.0
             )
-            raw = response.choices[0].message.content
+            raw = response.choices[0].message.content or ""
             parsed = parse_action(raw)
             if parsed and validate_action(parsed, env_type):
                 return parsed
