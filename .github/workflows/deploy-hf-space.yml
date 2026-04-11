@@ -9,19 +9,16 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      HF_SPACE_ID: Garvit0012/my-openenv
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Validate required config
         env:
-          HF_SPACE_ID: ${{ vars.HF_SPACE_ID }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          if [ -z "$HF_SPACE_ID" ]; then
-            echo "Missing repo variable HF_SPACE_ID (format: username/space_name)"
-            exit 1
-          fi
           if [ -z "$HF_TOKEN" ]; then
             echo "Missing repo secret HF_TOKEN"
             exit 1
@@ -33,7 +30,6 @@ jobs:
 
       - name: Clone Hugging Face Space
         env:
-          HF_SPACE_ID: ${{ vars.HF_SPACE_ID }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           git clone "https://oauth2:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE_ID}" hf-space
