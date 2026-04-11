@@ -140,13 +140,13 @@ async def step_env(request: dict):
             ep_data["done"] = True
             # Real Environment Normalization
             if env_type == "email":
-                final_score = max(0.0, min(1.0, ep_data["cumulative_score"] / 0.85))
+                final_score = max(0.001, min(0.999, ep_data["cumulative_score"] / 0.85))
             elif env_type == "legal":
-                final_score = max(0.0, min(1.0, ep_data["cumulative_score"] / 0.70))
+                final_score = max(0.001, min(0.999, ep_data["cumulative_score"] / 0.70))
             elif env_type == "hr":
-                final_score = max(0.0, min(1.0, ep_data["cumulative_score"] / 0.90))
+                final_score = max(0.001, min(0.999, ep_data["cumulative_score"] / 0.90))
             else:
-                final_score = ep_data["cumulative_score"]
+                final_score = max(0.001, min(0.999, ep_data["cumulative_score"]))
             
             ep_data["final_score"] = final_score
         
@@ -176,7 +176,8 @@ def list_tasks(env_type: str = "email"):
 @app.get("/score/{episode_id}")
 def get_score(episode_id: str):
     if episode_id in episodes_db:
-        score = max(0.0, episodes_db[episode_id]["final_score"] if episodes_db[episode_id]["done"] else episodes_db[episode_id]["cumulative_score"])
+        raw_score = episodes_db[episode_id]["final_score"] if episodes_db[episode_id]["done"] else episodes_db[episode_id]["cumulative_score"]
+        score = max(0.001, min(0.999, raw_score))
         return {"final_score": score, "step_scores": [], "grader_details": {}}
     raise HTTPException(status_code=404, detail="Not found")
 
