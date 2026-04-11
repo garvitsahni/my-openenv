@@ -28,6 +28,15 @@ async def security_headers(request: Request, call_next):
     response.headers["Permissions-Policy"] = PERMISSIONS_POLICY
     return response
 
+
+@app.get("/")
+def root():
+    return {
+        "name": "WorkBench OpenEnv API",
+        "status": "running",
+        "endpoints": ["/health", "/tasks", "/reset", "/step", "/state", "/score/{episode_id}", "/dashboard"],
+    }
+
 # In-memory episode tracking for the dashboard
 # Format: {"ep_id": {"env_type": "email", "difficulty": "easy", "step_count": 0, "max_steps": 30, "cumulative_score": 0.0, "passing_score": 0.5, "recent_actions": [], "done": False, "final_score": 0.0}}
 episodes_db = {}
@@ -61,6 +70,18 @@ def reset_env(
 ):
     global active_episode_id
     try:
+        resolved_task_id = (req.task_id if req else None) or task_id
+        resolved_seed = req.seed if req else seed
+        if not resolved_task_id:
+            if env_type == "email":
+                resolved_task_id = "email-triage-easy"
+            elif env_type == "legal":
+                resolved_task_id = "legal-review-easy"
+            elif env_type == "hr":
+                resolved_task_id = "hr-screening-easy"
+            else:
+                raise HTTPException(status_code=400, detail="Invalid env_type")
+
         env = get_env_instance(env_type)
         if body:
             task_id = body.get("task_id", task_id)

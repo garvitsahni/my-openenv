@@ -1,12 +1,12 @@
----
-title: WorkBench OpenEnv
-emoji: 🚀
-colorFrom: blue
-colorTo: indigo
-sdk: docker
+﻿---
+title: "WorkBench OpenEnv"
+emoji: "🚀"
+colorFrom: "blue"
+colorTo: "indigo"
+sdk: "docker"
 sdk_version: "0.0.1"
 python_version: "3.11"
-app_file: app.py
+app_file: "app.py"
 pinned: false
 ---
 # WorkBench Multi-Environment Platform
