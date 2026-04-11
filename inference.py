@@ -5,7 +5,7 @@ import re
 from typing import Any
 from urllib import error as urlerror
 from urllib import request as urlrequest
-import openai
+import litellm
 
 try:
     from dotenv import load_dotenv
@@ -15,7 +15,7 @@ except Exception:
 
 
 SERVER_URL = os.environ.get("ENV_BASE_URL", "http://localhost:7860")
-MODEL_NAME = os.environ.get("MODEL_NAME", "gpt-4o-mini")
+MODEL_NAME = os.environ.get("MODEL_NAME", "gemini/gemini-2.0-flash")
 
 TASKS = [
     ("email-triage-easy", "email"),
@@ -116,13 +116,18 @@ def validate_action(parsed: dict, env_type: str) -> bool:
 
 def call_with_retry(model: str, prompt: str, env_type: str, max_retries: int = 3) -> dict:
     current_prompt = prompt
-    client = openai.OpenAI(
-        base_url=os.environ.get("API_BASE_URL"),
-        api_key=os.environ.get("API_KEY", "dummy-key"),
-    )
+    
+    api_key = os.environ.get("API_KEY", "")
+    api_base = os.environ.get("API_BASE_URL", "")
+    
     for _ in range(max_retries):
         try:
-            response = client.chat.completions.create(
+            if api_key:
+                litellm.api_key = api_key
+            if api_base:
+                litellm.api_base = api_base
+                
+            response = litellm.completion(
                 model=model,
                 messages=[{"role": "user", "content": current_prompt}],
                 temperature=0.0,
@@ -183,11 +188,12 @@ def ensure_proxy_call(model: str) -> None:
         pass
 
     try:
-        client = openai.OpenAI(
-            base_url=os.environ.get("API_BASE_URL"),
-            api_key=os.environ.get("API_KEY", "dummy-key"),
-        )
-        client.chat.completions.create(
+        api_base = os.environ.get("API_BASE_URL", "")
+        if api_key:
+            litellm.api_key = api_key
+        if api_base:
+            litellm.api_base = api_base
+        litellm.completion(
             model=model,
             messages=[{"role": "user", "content": "Return exactly: ok"}],
             temperature=0.0,
