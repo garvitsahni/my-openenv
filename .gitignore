@@ -1,1 +1,7 @@
-﻿node_modules/\n__pycache__/\n.env\n*.pyc\nepisode_log.jsonl\n.pytest_cache/\n.ipynb_checkpoints/
+node_modules/
+__pycache__/
+.env
+*.pyc
+episode_log.jsonl
+.pytest_cache/
+.ipynb_checkpoints/
