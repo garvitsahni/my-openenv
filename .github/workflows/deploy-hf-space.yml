@@ -41,6 +41,17 @@ jobs:
         run: |
           git lfs install
 
+      - name: Debug clone URL
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          HF_TOKEN_CLEAN="$(printf '%s' "$HF_TOKEN" | tr -d '[:space:]')"
+          STATUS=$(curl -s -o /tmp/space_check.json -w "%{http_code}" \
+            -H "Authorization: Bearer ${HF_TOKEN_CLEAN}" \
+            "https://huggingface.co/api/spaces/${HF_SPACE_ID}")
+          echo "Space API status: $STATUS"
+          cat /tmp/space_check.json
+
       - name: Clone Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
