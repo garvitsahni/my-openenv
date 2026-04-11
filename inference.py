@@ -361,7 +361,13 @@ def run_task(task_id: str, env_type: str) -> None:
 
     # FIX 7: [END] block always emitted with flush=True
     raw_score = final_score.get("final_score", 0.001)
-    safe_score = min(max(float(raw_score), 0.001), 0.999)
+    try:
+        v = float(raw_score)
+        if v != v or v == float('inf') or v == float('-inf'):  # NaN/inf check
+            v = 0.001
+    except (TypeError, ValueError):
+        v = 0.001
+    safe_score = min(max(v, 0.001), 0.999)
     emit_block("[END]", {
         "task": task_id,
         "env": env_type,

@@ -21,9 +21,16 @@ PERMISSIONS_POLICY = "camera=(), microphone=(), geolocation=()"
 
 # FIX 1: Single source-of-truth clamp function used EVERYWHERE
 # Validator requires strictly (0, 1) — 0.0 and 1.0 are both rejected
+import math
+
 def clamp_score(raw: float) -> float:
     """Clamp score to strictly open interval (0.001, 0.999)."""
-    return round(max(0.001, min(0.999, float(raw))), 4)
+    v = float(raw)
+    if math.isnan(v) or math.isinf(v) or v <= 0:
+        return 0.001
+    if v >= 1:
+        return 0.999
+    return round(max(0.001, min(0.999, v)), 4)
 
 
 @app.middleware("http")
