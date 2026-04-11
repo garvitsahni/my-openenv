@@ -34,22 +34,15 @@ def root():
     return {
         "name": "WorkBench OpenEnv API",
         "status": "running",
-        "endpoints": ["/health", "/tasks", "/reset", "/step", "/state", "/score/{episode_id}", "/dashboard"],
+        "version": APP_VERSION,
+        "endpoints": ["/health", "/tasks", "/reset", "/step", "/state", "/score/{episode_id}", "/dashboard"]
     }
+
 
 # In-memory episode tracking for the dashboard
 # Format: {"ep_id": {"env_type": "email", "difficulty": "easy", "step_count": 0, "max_steps": 30, "cumulative_score": 0.0, "passing_score": 0.5, "recent_actions": [], "done": False, "final_score": 0.0}}
 episodes_db = {}
 active_episode_id = None
-
-@app.get("/")
-def root():
-    return {
-        "name": "WorkBench OpenEnv API",
-        "status": "running",
-        "version": APP_VERSION,
-        "endpoints": ["/health", "/tasks", "/reset", "/step", "/state", "/score/{episode_id}", "/dashboard"]
-    }
 
 @app.get("/version")
 def version():
@@ -155,19 +148,19 @@ async def step_env(request: dict):
         if len(ep_data["recent_actions"]) > 5:
             ep_data["recent_actions"].pop()
             
-        if done:
-            ep_data["done"] = True
-            # Real Environment Normalization
-            if env_type == "email":
-                final_score = max(0.0, min(1.0, ep_data["cumulative_score"] / 0.85))
-            elif env_type == "legal":
-                final_score = max(0.0, min(1.0, ep_data["cumulative_score"] / 0.70))
-            elif env_type == "hr":
-                final_score = max(0.0, min(1.0, ep_data["cumulative_score"] / 0.90))
-            else:
-                final_score = ep_data["cumulative_score"]
+            if done:
+                ep_data["done"] = True
+                # Real Environment Normalization
+                if env_type == "email":
+                    final_score = max(0.01, min(0.99, ep_data["cumulative_score"] / 0.85))
+                elif env_type == "legal":
+                    final_score = max(0.01, min(0.99, ep_data["cumulative_score"] / 0.70))
+                elif env_type == "hr":
+                    final_score = max(0.01, min(0.99, ep_data["cumulative_score"] / 0.90))
+                else:
+                    final_score = max(0.01, min(0.99, ep_data["cumulative_score"]))
                 
-            ep_data["final_score"] = final_score
+                ep_data["final_score"] = final_score
             
             global active_episode_id
             if active_episode_id == episode_id:
@@ -195,7 +188,8 @@ def list_tasks(env_type: str = "email"):
 @app.get("/score/{episode_id}")
 def get_score(episode_id: str):
     if episode_id in episodes_db:
-        score = max(0.0, episodes_db[episode_id]["final_score"] if episodes_db[episode_id]["done"] else episodes_db[episode_id]["cumulative_score"])
+        raw_score = episodes_db[episode_id]["final_score"] if episodes_db[episode_id]["done"] else episodes_db[episode_id]["cumulative_score"]
+        score = max(0.01, min(0.99, raw_score))
         return {"final_score": score, "step_scores": [], "grader_details": {}}
     raise HTTPException(status_code=404, detail="Not found")
 
@@ -247,57 +241,8 @@ def get_dashboard_data():
         "completed_episodes": sorted(completed, key=lambda x: x["time"], reverse=True)[:10],
         "stats": {
             "total": total_episodes,
-            "avg_score": avg_score,
-            "best_score": best_score,
+            "avg_score": round(avg_score, 2),
+            "best_score": round(best_score, 2),
             "pass_rate": round(pass_rate, 1)
         }
-    }
-    completed = []
-    total_score = 0
-    best_score = -999
-    passed = 0
-    
-    for ep in episodes_db.values():
-        if ep["done"]:
-            sc = max(0.0, ep["final_score"])
-            total_score += sc
-            best_score = max(best_score, sc)
-            if sc >= ep["passing_score"]:
-                passed += 1
-            completed.append({
-                "episode_id": ep["episode_id"],
-                "env_type": ep["env_type"],
-                "difficulty": ep["difficulty"],
-                "final_score": sc,
-                "passing_score": ep["passing_score"],
-                "steps": ep["step_count"]
-            })
-            
-    completed = completed[-10:]
-    stats = {
-        "total": len(completed),
-        "avg_score": total_score / len(completed) if completed else 0.0,
-        "best_score": best_score if completed else 0.0,
-        "pass_rate": round(passed / len(completed) * 100) if completed else 0
-    }
-    
-    active_payload = None
-    if active_episode_id and active_episode_id in episodes_db:
-        aep = episodes_db[active_episode_id]
-        active_payload = {
-            "episode_id": aep["episode_id"],
-            "env_type": aep["env_type"],
-            "difficulty": aep["difficulty"],
-            "task_id": aep["task_id"],
-            "step_count": aep["step_count"],
-            "max_steps": aep["max_steps"],
-            "cumulative_score": aep["cumulative_score"],
-            "passing_score": aep["passing_score"],
-            "recent_actions": aep["recent_actions"]
-        }
-        
-    return {
-        "active_episode": active_payload,
-        "completed_episodes": completed,
-        "stats": stats
     }
