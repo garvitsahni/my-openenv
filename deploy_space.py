@@ -21,7 +21,7 @@ def deploy_hf_space():
             repo_id=repo_id,
             repo_type="space",
             # Exclude tests and logs 
-            ignore_patterns=["*.jsonl", "tests/*", "output*", "extract_prd.py", ".pytest_cache/*", "__pycache__/*", ".env"] 
+            ignore_patterns=["*.jsonl", "tests/*", "output*", "extract_prd.py", ".pytest_cache/*", "__pycache__/*", ".env", ".huggingface/*"] 
         )
     except Exception as e:
         print(f"Error uploading files: {e}")
